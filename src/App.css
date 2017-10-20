@@ -1,0 +1,36 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  width: auto;
+  height: auto;
+}
+
+.App-header {
+  background-color: rgb(255, 255, 255);
+  color: rgb(53, 53, 53);
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.Section-title {
+  font-size: x-large;
+  text-transform: capitalize;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.list-item {
+  font-size: 1em;
+  border-color: rgb(53, 53, 53);
+  padding-top: 10px;
+}
+
+.displayNone {
+  display: none;
+}
