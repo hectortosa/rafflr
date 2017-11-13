@@ -1,6 +1,6 @@
 # React Raffle
 
-![Heroku](https://heroku-badge.herokuapp.com/?app=react-raffle)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=react-raffle&style=flat&svg=1)](https://react-raffle.herokuapp.com/)
 
 This simple application was made to learn [React](https://github.com/facebook/react). It is a serverless app so the raffle logic part is performed in a [Auth0 WebTask](https://webtask.io/).
 
