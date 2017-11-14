@@ -2,7 +2,7 @@
 
 [![Heroku](http://heroku-badge.herokuapp.com/?app=react-raffle&style=flat&svg=1)](https://react-raffle.herokuapp.com/)
 
-This simple application was made to learn [React](https://github.com/facebook/react). It is a serverless app so the raffle logic part is performed in a [Auth0 WebTask](https://webtask.io/).
+This simple application was made to learn [React][reactjs]. It is a serverless app so the raffle logic part is performed in a [Auth0 Webtasks][webtasks] made with [Serverless Framework][serverless], but any other [Serverless Infrastructure Provider](https://serverless.com/framework/docs/providers/) can be used, like [Google Cloud Functions][gcfunctions]. The serverless code for Webtasks and Google Cloud Functions and the Serverless configuration file (serverless.yml) are included under `serverless` folder.
 
 It is so simple to use:
 
@@ -17,7 +17,7 @@ It is so simple to use:
 
 To run the app simply follow this steps:
 
-- Clone the repo: git clone https://github.com/hectortosa/react-raffle.git
+- Clone the repo: `git clone https://github.com/hectortosa/react-raffle.git`
 - Install dependencies: `yarn install`or `npm install`
 - Run the app: `yarn start` or `npm start`
 
@@ -30,10 +30,17 @@ To run the app simply follow this steps:
 
 ### Web
 
-- [React](https://github.com/facebook/react)
+- [React][reactjs]
 - [Bootstrap](https://github.com/twbs/bootstrap)
 - [Request](https://github.com/request/request)
 
 ### Serverless
 
-- [WebTask](https://webtask.io/)
+- [Serverless Framework][serverless]
+- [Auth0 Webtasks][webtasks]
+- [Google Cloud Functions][gcfunctions]
+
+[reactjs]: https://github.com/facebook/react "ReactJS"
+[serverless]: https://serverless.com/ "Serverless Framework"
+[webtasks]: https://webtask.io/ "Auth0 Webtasks"
+[gcfunctions]: https://cloud.google.com/functions/ "Google Cloud Functions"

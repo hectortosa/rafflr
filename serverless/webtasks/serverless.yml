@@ -1,0 +1,12 @@
+service:
+  name: raffle
+
+provider:
+  name: webtasks
+
+functions:
+  main:
+    handler: handler
+
+plugins:
+  - '@webtask/serverless-webtasks'

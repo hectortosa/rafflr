@@ -79,7 +79,7 @@ class Lottery extends Component {
   runLottery (event) {
     var request = require("request"),
       requestOptions = {
-        uri: "https://wt-773198c4400b904deded251f7813917d-0.run.webtask.io/raffle",
+        uri: "https://wt-773198c4400b904deded251f7813917d-0.sandbox.auth0-extend.com/raffle-dev-main",
         method: "POST",
         json: true,
         body: { prizes: this.prizes, participants: this.participants, unnasignedName: "To Share" }
@@ -135,7 +135,7 @@ class LotteryResults extends Component {
   }
 
   generateWinner (winner, index) {
-    return <Winner name={winner} prizes={this.props.value[winner]} />
+    return <Winner key={winner} name={winner} prizes={this.props.value[winner]} />
   }
 
   render () {
@@ -153,7 +153,7 @@ class Winner extends Component {
       <div className={"col"}>
         <h3 className="Section-title">{this.props.name}</h3>
         {this.props.prizes.map(function (prize, index) {
-          return <div>{prize}</div>
+          return <div key={index}>{prize}</div>
         })}
     </div>
     );
