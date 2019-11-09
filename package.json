@@ -2,8 +2,8 @@
   "name": "react-raffle",
   "version": "1.0.1",
   "dependencies": {
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
     "request": "2.88.0"
   },
