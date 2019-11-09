@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './images/header.png';
+import { shuffle } from 'shufflr';
 import './App.css';
 
 class App extends Component {
@@ -29,7 +30,8 @@ class Lottery extends Component {
     };
 
     this.runLottery = this.runLottery.bind(this);
-    this.getResults = this.getResults.bind(this);
+    this.buildParticipantsList = this.buildParticipantsList.bind(this);
+    this.getOrAddProperty = this.getOrAddProperty.bind(this);
 
     this.handlePizesChange = this.handlePizesChange.bind(this);
     this.addPrize = this.addPrize.bind(this);
@@ -76,25 +78,57 @@ class Lottery extends Component {
     );
   }
 
-  runLottery (event) {
-    var request = require("request"),
-      requestOptions = {
-        uri: "https://wt-773198c4400b904deded251f7813917d-0.sandbox.auth0-extend.com/raffle-dev-main",
-        method: "POST",
-        json: true,
-        body: { prizes: this.prizes, participants: this.participants, unnasignedName: "To Share" }
-      };
+  runLottery(event) {
+    var participantsList = [],
+    shuffledPrizes = [],
+    shuffledParticipants = [],
+    raffleResult = {};
 
-    request(requestOptions, this.getResults);
-  }
+    participantsList = this.buildParticipantsList(this.participants, this.prizes.length, "To Share");
 
-  getResults (error, response, body) {
-    if (response && response.statusCode === 200) {
-      this.setState({ results: body });
+    shuffledPrizes = shuffle(this.prizes);
+    shuffledParticipants = shuffle(participantsList);
+
+    for (var i = 0; i < shuffledPrizes.length; i++) {
+      this.getOrAddProperty(raffleResult, shuffledParticipants[i], []).push(shuffledPrizes[i]);
     }
+
+    this.setState({ results: raffleResult });
   }
 
-  handlePizesChange (event) {
+  buildParticipantsList(participants, numberOfPrizes, spareParticipant) {
+    var assignement,
+      toShare,
+      i,
+      result = [];
+      
+    if (numberOfPrizes <= participants.length) {
+      return participants;
+    }
+  
+    assignement = Math.floor(numberOfPrizes / participants.length);
+    toShare = numberOfPrizes - (assignement * participants.length);
+    
+    for (i = 0; i < assignement; i++) {
+      result = result.concat(participants);
+    }
+    
+    for (i = 0; i < toShare; i++) {
+      result.push(spareParticipant);
+    }
+    
+    return result;
+  }
+
+  getOrAddProperty(object, property, initializer) {
+    if (!object[property]) {
+      object[property] = initializer;
+    }
+    
+    return object[property];
+  }
+
+  handlePizesChange(event) {
     this.setState({ newPrize: event.target.value });
   }
 
