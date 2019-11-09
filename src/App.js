@@ -89,7 +89,7 @@ class Lottery extends Component {
     shuffledPrizes = shuffle(this.prizes);
     shuffledParticipants = shuffle(participantsList);
 
-    for (var i = 0; i < shuffledPrizes.length; i++) {
+    for (var i = 0; i < this.prizes.length; i++) {
       this.getOrAddProperty(raffleResult, shuffledParticipants[i], []).push(shuffledPrizes[i]);
     }
 
@@ -99,7 +99,6 @@ class Lottery extends Component {
   buildParticipantsList(participants, numberOfPrizes, spareParticipant) {
     var assignement,
       toShare,
-      i,
       result = [];
       
     if (numberOfPrizes <= participants.length) {
@@ -109,11 +108,11 @@ class Lottery extends Component {
     assignement = Math.floor(numberOfPrizes / participants.length);
     toShare = numberOfPrizes - (assignement * participants.length);
     
-    for (i = 0; i < assignement; i++) {
+    for (var i = 0; i < assignement; i++) {
       result = result.concat(participants);
     }
     
-    for (i = 0; i < toShare; i++) {
+    for (var j = 0; j < toShare; j++) {
       result.push(spareParticipant);
     }
     
