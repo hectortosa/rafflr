@@ -10,7 +10,7 @@ class App extends Component {
         <div className="App-header row">
         <div className="col">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1>React Raffle</h1>
+          <h1>Rafflr App</h1>
           </div>
         </div>
         <Lottery prizesName="Prizes" participantsName="Participants" />
@@ -132,8 +132,12 @@ class Lottery extends Component {
   }
 
   addPrize(event) {
-    this.prizeList.push(<div key={this.state.newPrize}>{this.state.newPrize}</div>);
-    this.prizes.push(this.state.newPrize);
+    var newEntry = this.state.newPrize;
+
+    newEntry.split(";").forEach((entry) => {
+      this.prizeList.push(<div key={entry.trim()}>{entry.trim()}</div>);
+      this.prizes.push(entry.trim());
+    });
 
     this.setState({ newPrize: "" });
 
@@ -145,8 +149,12 @@ class Lottery extends Component {
   }
 
   addParticipant(event) {
-    this.participantList.push(<div key={this.state.newParticipant}>{this.state.newParticipant}</div>);
-    this.participants.push(this.state.newParticipant);
+    var newEntry = this.state.newParticipant;
+
+    newEntry.split(";").forEach((entry) => {
+      this.participantList.push(<div key={entry.trim()}>{entry.trim()}</div>);
+      this.participants.push(entry.trim());
+    });
 
     this.setState({ newParticipant: "" });
 
