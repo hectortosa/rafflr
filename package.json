@@ -2,7 +2,7 @@
   "name": "react-raffle",
   "version": "2.1.0",
   "dependencies": {
-    "react": "^16.13.0",
+    "react": "^16.14.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",
     "shufflr": "^2.0.8"
