@@ -1,6 +1,5 @@
 # Rafflr App
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/f7188396-6484-4e66-8b01-7d6bd003fc81/deploy-status)](https://rafflrapp.netlify.com)
+![Rafflr App CI](https://github.com/hectortosa/react-raffle/workflows/Rafflr%20App%20CI/badge.svg) [![Netlify Status](https://api.netlify.com/api/v1/badges/f7188396-6484-4e66-8b01-7d6bd003fc81/deploy-status)](https://rafflrapp.netlify.com)
 
 This is a simple app to do Raffles.
 
