@@ -1,5 +1,5 @@
 {
-  "name": "react-raffle",
+  "name": "rafflr",
   "version": "2.1.2",
   "dependencies": {
     "react": "^17.0.2",
@@ -29,7 +29,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hectortosa/react-raffle.git"
+    "url": "git+https://github.com/hectortosa/rafflr.git"
   },
   "keywords": [
     "react",
@@ -39,7 +39,7 @@
   "author": "Héctor Tortosa <hector.tortosa@icloud.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hectortosa/react-raffle/issues"
+    "url": "https://github.com/hectortosa/rafflr/issues"
   },
-  "homepage": "https://rafflrapp.netlify.com"
+  "homepage": "https://github.com/hectortosa/rafflr"
 }
