@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './images/header.png';
 import { shuffle } from 'shufflr';
 import './App.css';
 
@@ -7,13 +6,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header row">
-        <div className="col">
-          <img src={logo} className="App-logo" alt="logo" />
+        <header>
           <h1>Rafflr App</h1>
-          </div>
-        </div>
-        <Lottery prizesName="Prizes" participantsName="Participants" />
+        </header>
+        <Lottery className="main-content" prizesName="Prizes" participantsName="Participants" />
       </div>
     );
   }
@@ -52,11 +48,11 @@ class Lottery extends Component {
         <div className="row">
           <div className="col">
             <DynamicList value={this.state.newPrize} name={this.props.prizesName} listItems={this.prizeList}
-              onSubmit={this.addPrize} onChange={this.handlePizesChange} />
+              onAdd={this.addPrize} onItemChange={this.handlePizesChange} />
           </div>
           <div className="col">
             <DynamicList value={this.state.newParticipant} name={this.props.participantsName} listItems={this.participantList}
-              onSubmit={this.addParticipant} onChange={this.handleParticipantsChange} />
+              onAdd={this.addParticipant} onItemChange={this.handleParticipantsChange} />
           </div>
         </div>
         <div className={"row"}>
@@ -68,7 +64,7 @@ class Lottery extends Component {
         </div>
         <div className="row">
           <div className="col">
-            <button onClick={this.runLottery}>Start Raffle</button>
+            <button disabled={false} onClick={this.runLottery}>Start Raffle</button>
           </div>
         </div>
         <div className={"row"}>
@@ -135,8 +131,13 @@ class Lottery extends Component {
     var newEntry = this.state.newPrize;
 
     newEntry.split(";").forEach((entry) => {
-      this.prizeList.push(<div key={entry.trim()}>{entry.trim()}</div>);
-      this.prizes.push(entry.trim());
+      if(this.prizes.includes(entry.trim())) {
+        console.log("price already in the list");
+      }
+      else {
+        this.prizeList.push(<div key={entry.trim()}>{entry.trim()}</div>);
+        this.prizes.push(entry.trim());
+      }
     });
 
     this.setState({ newPrize: "" });
@@ -152,8 +153,13 @@ class Lottery extends Component {
     var newEntry = this.state.newParticipant;
 
     newEntry.split(";").forEach((entry) => {
-      this.participantList.push(<div key={entry.trim()}>{entry.trim()}</div>);
-      this.participants.push(entry.trim());
+      if (this.participants.includes(entry.trim())) {
+        console.log("participant already in the list");
+      }
+      else {
+        this.participantList.push(<div key={entry.trim()}>{entry.trim()}</div>);
+        this.participants.push(entry.trim());
+      }
     });
 
     this.setState({ newParticipant: "" });
@@ -202,6 +208,12 @@ class Winner extends Component {
 }
 
 class DynamicList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.addOnEnter = this.addOnEnter.bind(this);
+  }
+
   render() {
     return (
       <div>
@@ -209,11 +221,16 @@ class DynamicList extends Component {
         <div>
           {this.props.listItems}
         </div>
-        <form onSubmit={this.props.onSubmit}>
-          <input type="text" value={this.props.value} onChange={this.props.onChange} />
-        </form>
+        <input type="text" value={this.props.value} onChange={this.props.onItemChange} onKeyPress={this.addOnEnter} />
+        <a href="" onClick={this.props.onAdd}>Add</a>
       </div>
     );
+  }
+
+  addOnEnter (event) {
+    if (event.key === 'Enter') {
+      this.props.onAdd(event);
+    }
   }
 }
 
