@@ -6,9 +6,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header>
+        <div className="header">
           <h1>Rafflr App</h1>
-        </header>
+        </div>
         <Lottery className="main-content" prizesName="Prizes" participantsName="Participants" />
       </div>
     );
@@ -40,6 +40,8 @@ class Lottery extends Component {
 
     this.participants = [];
     this.prizes = [];
+
+    this.soundEffect = new Audio('./sounds/raffle-effect.wav');
   }
 
   render () {
@@ -80,16 +82,22 @@ class Lottery extends Component {
     shuffledParticipants = [],
     raffleResult = {};
 
-    participantsList = this.buildParticipantsList(this.participants, this.prizes.length, "To Share");
+    for (var i = 1; i<=20; i++) {
+      setTimeout((function() {
+        raffleResult = [];
 
-    shuffledPrizes = shuffle(this.prizes);
-    shuffledParticipants = shuffle(participantsList);
+        participantsList = this.buildParticipantsList(this.participants, this.prizes.length, "To Share");
 
-    for (var i = 0; i < this.prizes.length; i++) {
-      this.getOrAddProperty(raffleResult, shuffledParticipants[i], []).push(shuffledPrizes[i]);
+        shuffledPrizes = shuffle(this.prizes);
+        shuffledParticipants = shuffle(participantsList);
+
+        for (var i = 0; i < this.prizes.length; i++) {
+          this.getOrAddProperty(raffleResult, shuffledParticipants[i], []).push(shuffledPrizes[i]);
+        }
+        
+        this.setState({ results: raffleResult });
+      }).bind(this), 100*i);
     }
-
-    this.setState({ results: raffleResult });
   }
 
   buildParticipantsList(participants, numberOfPrizes, spareParticipant) {
