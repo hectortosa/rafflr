@@ -15,6 +15,8 @@ class App extends Component {
   }
 }
 
+
+
 class Lottery extends Component {
   constructor (props) {
     super(props);
@@ -26,6 +28,10 @@ class Lottery extends Component {
     };
 
     this.runLottery = this.runLottery.bind(this);
+    this.runLotteryWithDelay = this.runLotteryWithDelay.bind(this);
+    this.sleep = this.sleep.bind(this);
+    this.decorateWinners = this.decorateWinners.bind(this);
+
     this.buildParticipantsList = this.buildParticipantsList.bind(this);
     this.getOrAddProperty = this.getOrAddProperty.bind(this);
 
@@ -41,7 +47,7 @@ class Lottery extends Component {
     this.participants = [];
     this.prizes = [];
 
-    this.soundEffect = new Audio('./sounds/raffle-effect.wav');
+    this.results = [];
   }
 
   render () {
@@ -66,7 +72,7 @@ class Lottery extends Component {
         </div>
         <div className="row">
           <div className="col">
-            <button disabled={false} onClick={this.runLottery}>Start Raffle</button>
+            <button disabled={false} onClick={this.runLotteryWithDelay}>Start Raffle</button>
           </div>
         </div>
         <div className={"row"}>
@@ -76,28 +82,60 @@ class Lottery extends Component {
     );
   }
 
-  runLottery(event) {
+  sleep(millis) { 
+    return new Promise(resolve => setTimeout(resolve, millis));
+  }
+
+  async runLotteryWithDelay(event) {
+    for (let i = 0; i < 15; i++) {
+      await this.sleep(i < 10 ? 100 : 50 * i); 
+      this.runLottery();
+    }
+
+    this.decorateWinners();
+
+    event.preventDefault();
+  }
+
+  runLottery() {
     var participantsList = [],
     shuffledPrizes = [],
-    shuffledParticipants = [],
-    raffleResult = {};
+    shuffledParticipants = [];
 
-    for (var i = 1; i<=20; i++) {
-      setTimeout((function() {
-        raffleResult = [];
+    this.results = [];
 
-        participantsList = this.buildParticipantsList(this.participants, this.prizes.length, "To Share");
+    participantsList = this.buildParticipantsList(this.participants, this.prizes.length, "To Share");
 
-        shuffledPrizes = shuffle(this.prizes);
-        shuffledParticipants = shuffle(participantsList);
+    shuffledPrizes = shuffle(this.prizes);
+    shuffledParticipants = shuffle(participantsList);
 
-        for (var i = 0; i < this.prizes.length; i++) {
-          this.getOrAddProperty(raffleResult, shuffledParticipants[i], []).push(shuffledPrizes[i]);
-        }
-        
-        this.setState({ results: raffleResult });
-      }).bind(this), 100*i);
+    for (var i = 0; i < this.prizes.length; i++) {
+      var currentWinner = this.results.find(element => element.winner === shuffledParticipants[i]);
+
+      if (currentWinner) {
+        currentWinner.prizes.push(shuffledPrizes[i])
+      } else {
+        this.results.push({ winner: shuffledParticipants[i], prizes: [shuffledPrizes[i]] });
+      }
     }
+
+    this.results.sort((a, b) => {
+      if (a.winner === b.winner) {
+        return 0;
+      }
+
+      return a.winner < b.winner ? -1 : 1; 
+    });
+    
+    this.setState({ results: this.results });
+  }
+
+  decorateWinners() {    
+    this.results.forEach((result) => {
+      result.winner = "🏆 " + result.winner + " 🏆";
+    });
+
+    this.setState({ results: this.results });
   }
 
   buildParticipantsList(participants, numberOfPrizes, spareParticipant) {
@@ -184,13 +222,13 @@ class LotteryResults extends Component {
   }
 
   renderWinners () {
-    const winners = Object.keys(this.props.value).map(this.generateWinner);
+    const winners = this.props.value.map(this.generateWinner);
 
     return winners;
   }
 
   generateWinner (winner, index) {
-    return <Winner key={winner} name={winner} prizes={this.props.value[winner]} />
+    return <Winner key={winner.winner} name={winner.winner} prizes={winner.prizes} />
   }
 
   render () {
@@ -224,7 +262,7 @@ class DynamicList extends Component {
 
   render() {
     return (
-      <div>
+      <div className="dynamic-list">
         <h3 className="Section-title">{this.props.name}</h3>
         <div>
           {this.props.listItems}
