@@ -15,8 +15,6 @@ class App extends Component {
   }
 }
 
-
-
 class Lottery extends Component {
   constructor (props) {
     super(props);
@@ -94,7 +92,7 @@ class Lottery extends Component {
 
     this.decorateWinners();
 
-    event.preventDefault();
+    event ? event.preventDefault() : null;
   }
 
   runLottery() {
@@ -173,8 +171,8 @@ class Lottery extends Component {
     this.setState({ newPrize: event.target.value });
   }
 
-  addPrize(event) {
-    var newEntry = this.state.newPrize;
+  addPrize(event, newPrize) {
+    var newEntry = newPrize ?? this.state.newPrize;
 
     newEntry.split(";").forEach((entry) => {
       if(this.prizes.includes(entry.trim())) {
@@ -188,15 +186,17 @@ class Lottery extends Component {
 
     this.setState({ newPrize: "" });
 
-    event.preventDefault();
+    event ? event.preventDefault() : null;
   }
 
   handleParticipantsChange(event) {
     this.setState({ newParticipant: event.target.value });
   }
 
-  addParticipant(event) {
-    var newEntry = this.state.newParticipant;
+  addParticipant(event, newParticipant) {
+    var newEntry = newParticipant ?? this.state.newParticipant;
+
+    console.log("Lottery: newEntry " + newEntry);
 
     newEntry.split(";").forEach((entry) => {
       if (this.participants.includes(entry.trim())) {
@@ -210,7 +210,7 @@ class Lottery extends Component {
 
     this.setState({ newParticipant: "" });
 
-    event.preventDefault();
+    event ? event.preventDefault() : null;
   }
 }
 
@@ -258,6 +258,26 @@ class DynamicList extends Component {
     super(props);
 
     this.addOnEnter = this.addOnEnter.bind(this);
+  }
+
+  componentDidMount() {
+    console.log("DynamicList: componentDidMount");
+
+    const params = new URLSearchParams(window.location.search);
+
+    console.log("DynamicList: params --> " + params);
+
+    const initialItems = params.get(this.props.name);
+
+    console.log("DynamicList: name --> " + this.props.name);
+    console.log("DynamicList: initialItems --> " + initialItems);
+
+    if(initialItems) {
+      initialItems.split(";").forEach(element => {
+        console.log("DynamicList: element --> " + element);
+        this.props.onAdd(undefined, element);
+      });
+    }
   }
 
   render() {
