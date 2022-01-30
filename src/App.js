@@ -15,8 +15,6 @@ class App extends Component {
   }
 }
 
-
-
 class Lottery extends Component {
   constructor (props) {
     super(props);
@@ -94,7 +92,7 @@ class Lottery extends Component {
 
     this.decorateWinners();
 
-    event.preventDefault();
+    event ? event.preventDefault() : null;
   }
 
   runLottery() {
@@ -173,12 +171,12 @@ class Lottery extends Component {
     this.setState({ newPrize: event.target.value });
   }
 
-  addPrize(event) {
-    var newEntry = this.state.newPrize;
+  addPrize(event, newPrize) {
+    var newEntry = newPrize ?? this.state.newPrize;
 
     newEntry.split(";").forEach((entry) => {
       if(this.prizes.includes(entry.trim())) {
-        console.log("price already in the list");
+        console.info("price already in the list");
       }
       else {
         this.prizeList.push(<div key={entry.trim()}>{entry.trim()}</div>);
@@ -188,19 +186,19 @@ class Lottery extends Component {
 
     this.setState({ newPrize: "" });
 
-    event.preventDefault();
+    event ? event.preventDefault() : null;
   }
 
   handleParticipantsChange(event) {
     this.setState({ newParticipant: event.target.value });
   }
 
-  addParticipant(event) {
-    var newEntry = this.state.newParticipant;
+  addParticipant(event, newParticipant) {
+    var newEntry = newParticipant ?? this.state.newParticipant;
 
     newEntry.split(";").forEach((entry) => {
       if (this.participants.includes(entry.trim())) {
-        console.log("participant already in the list");
+        console.info("participant already in the list");
       }
       else {
         this.participantList.push(<div key={entry.trim()}>{entry.trim()}</div>);
@@ -210,7 +208,7 @@ class Lottery extends Component {
 
     this.setState({ newParticipant: "" });
 
-    event.preventDefault();
+    event ? event.preventDefault() : null;
   }
 }
 
@@ -258,6 +256,18 @@ class DynamicList extends Component {
     super(props);
 
     this.addOnEnter = this.addOnEnter.bind(this);
+  }
+
+  componentDidMount() {
+    const params = new URLSearchParams(window.location.search);
+
+    const initialItems = params.get(this.props.name);
+
+    if(initialItems) {
+      initialItems.split(";").forEach(element => {
+        this.props.onAdd(undefined, element);
+      });
+    }
   }
 
   render() {
