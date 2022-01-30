@@ -176,7 +176,7 @@ class Lottery extends Component {
 
     newEntry.split(";").forEach((entry) => {
       if(this.prizes.includes(entry.trim())) {
-        console.log("price already in the list");
+        console.info("price already in the list");
       }
       else {
         this.prizeList.push(<div key={entry.trim()}>{entry.trim()}</div>);
@@ -196,11 +196,9 @@ class Lottery extends Component {
   addParticipant(event, newParticipant) {
     var newEntry = newParticipant ?? this.state.newParticipant;
 
-    console.log("Lottery: newEntry " + newEntry);
-
     newEntry.split(";").forEach((entry) => {
       if (this.participants.includes(entry.trim())) {
-        console.log("participant already in the list");
+        console.info("participant already in the list");
       }
       else {
         this.participantList.push(<div key={entry.trim()}>{entry.trim()}</div>);
@@ -261,20 +259,12 @@ class DynamicList extends Component {
   }
 
   componentDidMount() {
-    console.log("DynamicList: componentDidMount");
-
     const params = new URLSearchParams(window.location.search);
-
-    console.log("DynamicList: params --> " + params);
 
     const initialItems = params.get(this.props.name);
 
-    console.log("DynamicList: name --> " + this.props.name);
-    console.log("DynamicList: initialItems --> " + initialItems);
-
     if(initialItems) {
       initialItems.split(";").forEach(element => {
-        console.log("DynamicList: element --> " + element);
         this.props.onAdd(undefined, element);
       });
     }
