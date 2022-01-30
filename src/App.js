@@ -27,6 +27,9 @@ class Lottery extends Component {
 
     this.runLottery = this.runLottery.bind(this);
     this.runLotteryWithDelay = this.runLotteryWithDelay.bind(this);
+
+    this.generateAndCopyRafflr = this.generateAndCopyRafflr.bind(this);
+
     this.sleep = this.sleep.bind(this);
     this.decorateWinners = this.decorateWinners.bind(this);
 
@@ -71,6 +74,14 @@ class Lottery extends Component {
         <div className="row">
           <div className="col">
             <button disabled={false} onClick={this.runLotteryWithDelay}>Start Raffle</button>
+          </div>
+        </div>
+        <div className={"row"}>
+          <div className={"col"}>&nbsp;</div>
+        </div>
+        <div className={"row"}>
+          <div className="col">
+            <a href="#" onClick={this.generateAndCopyRafflr}>Copy Rafflr</a>
           </div>
         </div>
         <div className={"row"}>
@@ -128,6 +139,19 @@ class Lottery extends Component {
     this.setState({ results: this.results });
   }
 
+  // Gets current URL and copy it to clipboard
+  generateAndCopyRafflr(event) {
+    var rafflrUrl = window.location.origin + "?Participants=" + this.participants.join(";") + "&Prizes=" + this.prizes.join(";");
+    
+    navigator.clipboard.writeText(rafflrUrl).then(function() {
+      console.info('Rafflr URL copied to clipboard');
+    }, function() {
+      console.warn('Failed to copy Rafflr URL to clipboard');
+    });
+
+    event ? event.preventDefault() : null;
+  }
+
   decorateWinners() {    
     this.results.forEach((result) => {
       result.winner = "🏆 " + result.winner + " 🏆";
@@ -174,6 +198,12 @@ class Lottery extends Component {
   addPrize(event, newPrize) {
     var newEntry = newPrize ?? this.state.newPrize;
 
+    if (newEntry.trim() === "")
+    {
+      console.warn("Empty prize cannot be added");
+      return;
+    }
+
     newEntry.split(";").forEach((entry) => {
       if(this.prizes.includes(entry.trim())) {
         console.info("price already in the list");
@@ -195,6 +225,12 @@ class Lottery extends Component {
 
   addParticipant(event, newParticipant) {
     var newEntry = newParticipant ?? this.state.newParticipant;
+
+    if (newEntry.trim() === "")
+    {
+      console.warn("Empty participant cannot be added");
+      return;
+    }
 
     newEntry.split(";").forEach((entry) => {
       if (this.participants.includes(entry.trim())) {
