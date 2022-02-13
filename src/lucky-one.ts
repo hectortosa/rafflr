@@ -28,6 +28,15 @@ export class LuckyOne extends LitElement {
       footer {
         display: flex;
         flex-direction: column;
+      }
+      div.winners-panel {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      span {
+        margin-block-start: 4em;
       }`
   ];
 
@@ -36,6 +45,9 @@ export class LuckyOne extends LitElement {
 
   @state()
   protected _theLuckyOne: string = "";
+
+  @state()
+  protected _raffleEnded: boolean = false;
 
   private saveController: SaveController = new SaveController(this, "lucky-one");
 
@@ -65,9 +77,11 @@ export class LuckyOne extends LitElement {
           <button ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Pick one</button>
           <a @click=${this._save} part="button">Save</a>
         </footer>
-      </div>
-      <div>
-        <winner-panel ?hidden=${this._theLuckyOne == ""} winner=${this._theLuckyOne} .prizes=${[]}></winner-panel>
+        <div class="winners-panel">
+          <span ?hidden=${!this._raffleEnded}>🍀</span>
+          <winner-panel ?hidden=${this._theLuckyOne == ""} winner=${this._theLuckyOne} .prizes=${[]}></winner-panel>
+          <span ?hidden=${!this._raffleEnded}>🍀</span>
+        </div>
       </div>
     `;
   }
@@ -78,10 +92,12 @@ export class LuckyOne extends LitElement {
   }
 
   private _canRaffle(): boolean {
-    return this._participants.length > 0;
+    return this._participants.length > 1;
   }
 
   private async _runWithDelay() {
+    this._raffleEnded = false;
+
     if (this._participants.length == 1) {
       this._theLuckyOne = this._participants[0];
     } else {
@@ -91,11 +107,10 @@ export class LuckyOne extends LitElement {
       }
     }
 
-    this._theLuckyOne = "🍀 " + this._theLuckyOne + " 🍀";
-
     await this.sleep(300);
 
     confetti({ particleCount: 100, origin: { x: 0.5, y: 0.8 } });
+    this._raffleEnded = true;
   }
 
   private sleep(millis: number) { 
