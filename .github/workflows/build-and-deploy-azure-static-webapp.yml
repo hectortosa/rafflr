@@ -5,9 +5,9 @@ on:
     branches:
       - master
   pull_request:
-    types: [opened, synchronize, reopened, closed]
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   build:
