@@ -1,6 +1,5 @@
-import {LitElement, html, css } from 'lit';
-import {customElement, property, state, query } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
+import { LitElement, html, css } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 
 import { buttonStyles } from './styles/button-styles.js';
 import { linkStyles } from './styles/link-styles.js';

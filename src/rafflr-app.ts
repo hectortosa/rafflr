@@ -6,8 +6,8 @@ import { linkStyles } from './styles/link-styles';
 import './prize-raffle';
 import './lucky-one';
 
-@customElement('app-container')
-export class AppContainer extends LitElement {
+@customElement('rafflr-app')
+export class RafflrApp extends LitElement {
     static styles = [
         linkStyles,
         css`
@@ -125,6 +125,6 @@ export class AppContainer extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-      'app-container': AppContainer;
+      'rafflr-app': RafflrApp;
     }
   }
