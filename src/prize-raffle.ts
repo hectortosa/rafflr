@@ -11,7 +11,6 @@ import { linkStyles } from './styles/link-styles';
 import { SaveController } from './save-controller';
 
 import "./dynamic-list";
-import { RaffleResult } from './types/RaffleResult';
 
 @customElement('prize-raffle')
 export class PrizeRaffle extends LitElement {
