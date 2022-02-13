@@ -11,6 +11,7 @@ import { linkStyles } from './styles/link-styles';
 import { SaveController } from './save-controller';
 
 import "./dynamic-list";
+import { RaffleResult } from './types/RaffleResult';
 
 @customElement('prize-raffle')
 export class PrizeRaffle extends LitElement {
@@ -32,6 +33,9 @@ export class PrizeRaffle extends LitElement {
       footer {
         display: flex;
         flex-direction: column;
+      }
+      span {
+        margin-block-start: 4em;
       }`
   ];
 
@@ -43,6 +47,9 @@ export class PrizeRaffle extends LitElement {
 
   @state()
   protected _results: Array<RaffleResult> = [];
+
+  @state()
+  protected _raffleEnded: boolean = false;
 
   private saveController: SaveController = new SaveController(this, "prize-raffle");
 
@@ -78,12 +85,14 @@ export class PrizeRaffle extends LitElement {
           <a @click=${this._save} part="button">Save</a>
         </footer>
         <div class="winners-panel">
+          <span ?hidden=${!this._raffleEnded}>🏆</span>
           ${this._results.map(
             (resultItem) =>
             html`
                 <winner-panel winner=${resultItem.winner} .prizes=${resultItem.prizes}></winner-panel> 
             `
           )}
+          <span ?hidden=${!this._raffleEnded}>🏆</span>
         </div>
       </div>
     `;
@@ -95,7 +104,7 @@ export class PrizeRaffle extends LitElement {
   }
 
   private _canRaffle(): boolean {
-    return this.prizes.length > 0 && this.participants.length > 0;
+    return this.prizes.length > 0 && this.participants.length > 1;
   }
 
   private _onItemsChanged(e: CustomEvent) {
@@ -111,6 +120,8 @@ export class PrizeRaffle extends LitElement {
   }
 
   private async _runWithDelay() {
+    this._raffleEnded = false;
+
     if (this._canRaffle()) {
       for (let i = 0; i < 15; i++) {
         await this.sleep(i < 10 ? 100 : 50 * i); 
@@ -121,6 +132,7 @@ export class PrizeRaffle extends LitElement {
     await this.sleep(300);
 
     confetti({ particleCount: 100, origin: { x: 0.5, y: 0.8 } });
+    this._raffleEnded = true;
   }
 
   private async _performRaffle() {
