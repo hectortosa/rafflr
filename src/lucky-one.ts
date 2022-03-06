@@ -98,13 +98,9 @@ export class LuckyOne extends LitElement {
   private async _runWithDelay() {
     this._raffleEnded = false;
 
-    if (this._participants.length == 1) {
-      this._theLuckyOne = this._participants[0];
-    } else {
-      for (let i = 0; i < 15; i++) {
-        await this.sleep(i < 10 ? 100 : 50 * i); 
-        this._getLuckyOne();
-      }
+    for (let i = 0; i < 15; i++) {
+      await this.sleep(i < 10 ? 100 : 50 * i); 
+      this._getLuckyOne();
     }
 
     await this.sleep(300);
@@ -118,8 +114,18 @@ export class LuckyOne extends LitElement {
   }
 
   private _getLuckyOne() {
-    console.log(this._participants);
-    const shuffledParticipants = shuffle(this._participants);
+    let participantsToShuffle: Array<string> = this._participants;
+
+    if (this._participants.length == 2) {
+      participantsToShuffle = new Array<string>();
+
+      for (let i = 0; i < 5; i++) {
+        participantsToShuffle.push(this._participants[0]);
+        participantsToShuffle.push(this._participants[1]);
+      }
+    }
+
+    const shuffledParticipants = shuffle(participantsToShuffle);
     const luckyOne = shuffledParticipants[0];
 
     this._theLuckyOne = luckyOne;
