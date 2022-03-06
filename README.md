@@ -17,7 +17,7 @@ You can add several entries at the same time separated by semi-colon `;`.
 
 You can save your current setup by clicking in **Save** link. This will generate the url with the current setup to the clipboard (note tihs might not work on all borwsers if they don't support it).
 
-## Raffle prizes
+## Raffle Prizes
 
 To use it, just add as many prizes and participants as you want by simply entering the value and pressing `Enter` or click `Add`. Press **Raffle** button to perform the raffle.
 
@@ -26,3 +26,7 @@ When the Raffle is performed, if there are more prizes than participants, and pr
 ## Lucky One
 
 In this type of raffle, there is no need to add a list of prizes. The Lucky One will be selected randomly from the list of participants.
+
+## Shuffle Order
+
+This raffle will simply re-order the participants list. Simply add the participants and click on **Shuffle** button.

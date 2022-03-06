@@ -5,6 +5,7 @@ import { linkStyles } from './styles/link-styles';
 
 import './prize-raffle';
 import './lucky-one';
+import './shuffle-order';
 
 @customElement('rafflr-app')
 export class RafflrApp extends LitElement {
@@ -85,6 +86,9 @@ export class RafflrApp extends LitElement {
             case 'lucky-one':
                 appSelected = html`<lucky-one></lucky-one>`;
                 break;
+            case 'shuffle-order':
+                appSelected = html`<shuffle-order></shuffle-order>`;
+                break;
             default:
                 appSelected = html`<prize-raffle></prize-raffle>`;
                 break;
@@ -96,6 +100,9 @@ export class RafflrApp extends LitElement {
         const luckyOneClasses = {
             selected: this.selectedMenu == 'lucky-one'
         };
+        const shuffleOrderClasses = {
+            selected: this.selectedMenu == 'shuffle-order'
+        };
 
         return html`
             <header>
@@ -105,7 +112,8 @@ export class RafflrApp extends LitElement {
                 <div class="header-main">
                     <ul>
                         <a id="prize-raffle" class=${classMap(raffleClasses)} @click=${this._menuItemSelected}>Prize Raffle</a>
-                        <a id="lucky-one" class=${classMap(luckyOneClasses)} @click=${this._menuItemSelected}>Lucky one</a>
+                        <a id="lucky-one" class=${classMap(luckyOneClasses)} @click=${this._menuItemSelected}>Lucky One</a>
+                        <a id="shuffle-order" class=${classMap(shuffleOrderClasses)} @click=${this._menuItemSelected}>Shuffle Order</a>
                     </ul>
                 </div>
                 <div class="header-right">
