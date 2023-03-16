@@ -1,6 +1,8 @@
 
 # Rafflr App
 
+[🔗 Rafflr Site](https://rafflr.codesharegrow.net/)
+
 [![Azure Static Web Apps CI/CD](https://github.com/hectortosa/rafflr/actions/workflows/build-and-deploy-azure-static-webapp.yml/badge.svg)](https://github.com/hectortosa/rafflr/actions/workflows/build-and-deploy-azure-static-webapp.yml)
 
 This is a simple app to do Raffles.
@@ -30,3 +32,19 @@ In this type of raffle, there is no need to add a list of prizes. The Lucky One 
 ## Shuffle Order
 
 This raffle will simply re-order the participants list. Simply add the participants and click on **Shuffle** button.
+
+## Development
+
+Rafflr uses [PNPM](https://pnpm.io/) + [Vite](https://vitejs.dev/) + [Lit](https://lit.dev/) + [TypeScript](https://www.typescriptlang.org/) (and their respectives required dependencies like Node).
+
+To quickly setup your local environment, run
+
+```bash
+pnpm i
+```
+
+then
+
+```bash
+npm run dev
+```
