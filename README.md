@@ -46,5 +46,5 @@ pnpm i
 then
 
 ```bash
-npm run dev
+pnpm run dev
 ```
