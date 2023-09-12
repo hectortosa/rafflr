@@ -10,14 +10,14 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@microsoft/fast-components": "^2.30.6",
+        "@fluentui/web-components": "^2.5.16",
         "canvas-confetti": "^1.6.0",
-        "lit": "^2.6.1",
-        "shufflr": "^2.0.16"
+        "lit": "^2.8.0",
+        "shufflr": "^2.0.17"
     },
     "devDependencies": {
-        "@types/canvas-confetti": "^1.6.0",
-        "typescript": "^5.0.2",
-        "vite": "^4.2.0"
+        "@types/canvas-confetti": "^1.6.1",
+        "typescript": "^5.2.2",
+        "vite": "^4.4.9"
     }
 }

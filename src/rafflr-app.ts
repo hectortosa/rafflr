@@ -1,12 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import {
-    fastButton,
-    fastDialog,
-    fastMenu,
-    fastMenuItem, 
-    provideFASTDesignSystem 
-} from "@microsoft/fast-components";
+    provideFluentDesignSystem,
+    fluentButton,
+    fluentMenu,
+    fluentMenuItem
+} from "@fluentui/web-components";
 import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
 
@@ -14,12 +13,11 @@ import './prize-raffle';
 import './lucky-one';
 import './shuffle-order';
 
-provideFASTDesignSystem()
+provideFluentDesignSystem()
     .register(
-        fastButton(),
-        fastDialog(),
-        fastMenu(),
-        fastMenuItem()
+        fluentButton(),
+        fluentMenu(),
+        fluentMenuItem()
     );
 
 @customElement('rafflr-app')
@@ -38,7 +36,7 @@ export class RafflrApp extends LitElement {
         header {
             display: flex;
             justify-content: left;
-            background: #24d1db;
+            background-color: #24d1db;
             color: white;
             height: 56px;
             align-items: center;
@@ -48,10 +46,15 @@ export class RafflrApp extends LitElement {
         .header-left {
             order: 1;
             display: flex;
-            align-items: center;
         }
-        .header-left-item {
+        .header-left-menu {
+            order: 1;
             flex: 1;
+            margin: 5px;
+        }
+        .header-left-title {
+            order: 2;
+            flex: 2;
             margin: 5px;
         }
         .header-main {
@@ -83,25 +86,25 @@ export class RafflrApp extends LitElement {
             color: white;
             font-weight: bold;
         }
-        fast-button {
+        fluent-button {
             background-color: white;
             color: #24d1db;
             justify-content: space-around;
         }
-        fast-menu {
+        fluent-menu {
             opacity: 0;
             background-color: #24d1db;
             position: absolute;
             transition: opacity 0.3s ease-in-out;
         }
-        fast-menu.show {
+        fluent-menu.show {
             opacity: 1;
         }
-        fast-menu-item {
+        fluent-menu-item {
             background-color: #24d1db;
             color: white;
         }
-        fast-menu-item:hover {
+        fluent-menu-item:hover {
             background-color: #00f2ff;
         }`
     ];
@@ -139,18 +142,18 @@ export class RafflrApp extends LitElement {
         return html`
             <header>
                 <div class="header-left">
-                    <fast-button class="header-left-item" @click=${this._toggleMenu}>Menu</fast-button>
-                    <h1 class="header-left-item">Rafflr</h1>
+                    <fluent-button class="header-left-menu" @click=${this._toggleMenu}>Menu</fluent-button>
+                    <h1 class="header-left-title">Rafflr</h1>
                 </div>
                 <div class="header-right">
                     <a class="end" target="_blank" href="https://github.com/hectortosa/rafflr" alt="Rafflr on GitHub">View on GitHub</a>
                 </div>
             </header>
-            <fast-menu>
-                <fast-menu-item id="price-raffle" @click=${this._menuItemSelected}>Price Raffle</fast-menu-item>
-                <fast-menu-item id="lucky-one" @click=${this._menuItemSelected}>Lucky One</fast-menu-item>
-                <fast-menu-item id="shuffle-order" @click=${this._menuItemSelected}>Shuffle Order</fast-menu-item>
-            </fast-menu>
+            <fluent-menu>
+                <fluent-menu-item id="price-raffle" @click=${this._menuItemSelected}>Price Raffle</fluent-menu-item>
+                <fluent-menu-item id="lucky-one" @click=${this._menuItemSelected}>Lucky One</fluent-menu-item>
+                <fluent-menu-item id="shuffle-order" @click=${this._menuItemSelected}>Shuffle Order</fluent-menu-item>
+            </fluent-menu>
             <div @setup-saved=${this._onSaved} class="content">
                 ${appSelected}
             </div>
@@ -161,14 +164,14 @@ export class RafflrApp extends LitElement {
     }
 
     private _toggleMenu() {
-        const menu = this.shadowRoot?.querySelector('fast-menu');
+        const menu = this.shadowRoot?.querySelector('fluent-menu');
         menu?.classList.toggle('show');
     }
 
     private _menuItemSelected(e: CustomEvent) {
         const menuItem = (e.target as HTMLLinkElement);
         this._selectedMenu = menuItem.id;
-        const menu = this.shadowRoot?.querySelector('fast-menu');
+        const menu = this.shadowRoot?.querySelector('fluent-menu');
         menu?.classList.toggle('show');
     }
 

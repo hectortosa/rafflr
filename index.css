@@ -3,4 +3,13 @@ body {
     padding: 10px;
     font-family: Arial, Helvetica, sans-serif;
     align-items: center;
+    background-color: white;
+    color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: white;
+    }
 }
