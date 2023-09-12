@@ -13,6 +13,11 @@ import { SaveController } from './save-controller';
 import "./dynamic-list";
 import "./winner-panel";
 
+/**
+ * Choose one from a list
+ *
+ * @fires setup-saved - Indicates when the list changes
+ */
 @customElement('lucky-one')
 export class LuckyOne extends LitElement {
   static override styles = [
@@ -57,13 +62,9 @@ export class LuckyOne extends LitElement {
     let params = new URLSearchParams(window.location.search);
     let initialParticipants = params.get("participants")?.split(";");
 
-    console.log("Initial participants: " + initialParticipants);
-
     if (initialParticipants) {
       this._participants = initialParticipants;
     }
-
-    console.log("Participants: " + this._participants);
   }
 
   override render() {
@@ -75,7 +76,7 @@ export class LuckyOne extends LitElement {
         <dynamic-list name="Participants" .list=${this._participants}></dynamic-list>
         <footer>
           <button ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Pick one</button>
-          <a @click=${this._save} part="button">Save</a>
+          <a @click=${this._save} part="button">Copy setup</a>
         </footer>
         <div class="winners-panel">
           <span ?hidden=${!this._raffleEnded}>🍀</span>
@@ -86,9 +87,9 @@ export class LuckyOne extends LitElement {
     `;
   }
 
-  private _save() {
+  private async _save() {
     let setupToSave = { participants: this._participants };
-    this.saveController.save(setupToSave);
+    await this.saveController.save(setupToSave);
   }
 
   private _canRaffle(): boolean {

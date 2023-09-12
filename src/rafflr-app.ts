@@ -1,15 +1,31 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
+import {
+    fastButton,
+    fastDialog,
+    fastMenu,
+    fastMenuItem, 
+    provideFASTDesignSystem 
+} from "@microsoft/fast-components";
+import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
 
 import './prize-raffle';
 import './lucky-one';
 import './shuffle-order';
 
+provideFASTDesignSystem()
+    .register(
+        fastButton(),
+        fastDialog(),
+        fastMenu(),
+        fastMenuItem()
+    );
+
 @customElement('rafflr-app')
 export class RafflrApp extends LitElement {
     static styles = [
+        buttonStyles,
         linkStyles,
         css`
         :host {
@@ -31,6 +47,12 @@ export class RafflrApp extends LitElement {
         }
         .header-left {
             order: 1;
+            display: flex;
+            align-items: center;
+        }
+        .header-left-item {
+            flex: 1;
+            margin: 5px;
         }
         .header-main {
             order: 2;
@@ -40,6 +62,14 @@ export class RafflrApp extends LitElement {
             display: flex;
             flex-grow: 1;
             justify-content: flex-end;
+        }
+        .end {
+            align-self: flex-end;
+            text-decoration: none;
+        }
+        .selected {
+            font-weight: bold;
+            font-style: italic;
         }
         a {
             color: white;
@@ -53,33 +83,45 @@ export class RafflrApp extends LitElement {
             color: white;
             font-weight: bold;
         }
-        .end {
-            align-self: flex-end;
-            text-decoration: none;
-        }
-        .selected {
-            font-weight: bold;
-            font-style: italic;
-        }
-        ul {
-            display: flex;
+        fast-button {
+            background-color: white;
+            color: #24d1db;
             justify-content: space-around;
+        }
+        fast-menu {
+            opacity: 0;
+            background-color: #24d1db;
+            position: absolute;
+            transition: opacity 0.3s ease-in-out;
+        }
+        fast-menu.show {
+            opacity: 1;
+        }
+        fast-menu-item {
+            background-color: #24d1db;
+            color: white;
+        }
+        fast-menu-item:hover {
+            background-color: #00f2ff;
         }`
     ];
 
     @state()
-    private selectedMenu: string = 'prize-raffle';
+    private _selectedMenu: string = 'prize-raffle';
+
+    @state()
+    protected _showMenu: boolean = false;
 
     constructor() {
         super();
         let params = new URLSearchParams(window.location.search);
-        this.selectedMenu = params.get('menu') || 'prize-raffle';
+        this._selectedMenu = params.get('menu') || 'prize-raffle';
     }
 
     override render() {
         let appSelected;
 
-        switch (this.selectedMenu) {
+        switch (this._selectedMenu) {
             case 'prize-raffle':
                 appSelected = html`<prize-raffle></prize-raffle>`;
                 break;
@@ -94,40 +136,46 @@ export class RafflrApp extends LitElement {
                 break;
         }
 
-        const raffleClasses = {
-            selected: this.selectedMenu == 'prize-raffle'
-        };
-        const luckyOneClasses = {
-            selected: this.selectedMenu == 'lucky-one'
-        };
-        const shuffleOrderClasses = {
-            selected: this.selectedMenu == 'shuffle-order'
-        };
-
         return html`
             <header>
                 <div class="header-left">
-                    <h1>Rafflr</h1>
-                </div>
-                <div class="header-main">
-                    <ul>
-                        <a id="prize-raffle" class=${classMap(raffleClasses)} @click=${this._menuItemSelected}>Prize Raffle</a>
-                        <a id="lucky-one" class=${classMap(luckyOneClasses)} @click=${this._menuItemSelected}>Lucky One</a>
-                        <a id="shuffle-order" class=${classMap(shuffleOrderClasses)} @click=${this._menuItemSelected}>Shuffle Order</a>
-                    </ul>
+                    <fast-button class="header-left-item" @click=${this._toggleMenu}>Menu</fast-button>
+                    <h1 class="header-left-item">Rafflr</h1>
                 </div>
                 <div class="header-right">
                     <a class="end" target="_blank" href="https://github.com/hectortosa/rafflr" alt="Rafflr on GitHub">View on GitHub</a>
                 </div>
             </header>
+            <fast-menu>
+                <fast-menu-item id="price-raffle" @click=${this._menuItemSelected}>Price Raffle</fast-menu-item>
+                <fast-menu-item id="lucky-one" @click=${this._menuItemSelected}>Lucky One</fast-menu-item>
+                <fast-menu-item id="shuffle-order" @click=${this._menuItemSelected}>Shuffle Order</fast-menu-item>
+            </fast-menu>
+            <div @setup-saved=${this._onSaved} class="content">
                 ${appSelected}
-            <footer></footer>
+            </div>
+            <footer>
+                <p id="save-confirmation-message" hidden>URL copied to clipboard</p>
+            </footer>
         `;
+    }
+
+    private _toggleMenu() {
+        const menu = this.shadowRoot?.querySelector('fast-menu');
+        menu?.classList.toggle('show');
     }
 
     private _menuItemSelected(e: CustomEvent) {
         const menuItem = (e.target as HTMLLinkElement);
-        this.selectedMenu = menuItem.id;
+        this._selectedMenu = menuItem.id;
+        const menu = this.shadowRoot?.querySelector('fast-menu');
+        menu?.classList.toggle('show');
+    }
+
+    private _onSaved(e: CustomEvent) {
+        const confirmationMessage = this.shadowRoot?.querySelector('#save-confirmation-message');
+        confirmationMessage?.toggleAttribute('hidden');
+        setTimeout(() => confirmationMessage?.toggleAttribute('hidden'), 1500);
     }
 }
 

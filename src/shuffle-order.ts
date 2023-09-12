@@ -13,6 +13,11 @@ import { SaveController } from './save-controller';
 import "./dynamic-list";
 import "./winner-panel";
 
+/**
+ * Shuffle order of a list
+ *
+ * @fires saved - Indicates when setup is saved
+ */
 @customElement('shuffle-order')
 export class ShuffleOrder extends LitElement {
   static override styles = [
@@ -75,7 +80,7 @@ export class ShuffleOrder extends LitElement {
         </div>
         <footer>
           <button ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Shuffle</button>
-          <a @click=${this._save} part="button">Save</a>
+          <a @click=${this._save} part="button">Copy setup</a>
         </footer>
         <!-- <div class="winners-panel">
           <span ?hidden=${!this._raffleEnded}>🎲</span>

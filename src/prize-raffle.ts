@@ -12,6 +12,11 @@ import { SaveController } from './save-controller';
 
 import "./dynamic-list";
 
+/**
+ * Raffle prices among participants
+ *
+ * @fires setup-saved - Indicates when setup is saved
+ */
 @customElement('prize-raffle')
 export class PrizeRaffle extends LitElement {
   static override styles = [
@@ -66,9 +71,6 @@ export class PrizeRaffle extends LitElement {
     if (initialPrizes) {
       this.prizes = initialPrizes;
     }
-
-    console.log("Participants: " + this.participants);
-    console.log("Prizes: " + this.prizes);
   }
 
   override render() {
@@ -81,7 +83,7 @@ export class PrizeRaffle extends LitElement {
         <dynamic-list name="Participants" .list=${this.participants}></dynamic-list>
         <footer>
           <button ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Raffle</button>
-          <a @click=${this._save} part="button">Save</a>
+          <a @click=${this._save} part="button">Copy setup</a>
         </footer>
         <div class="winners-panel">
           <span ?hidden=${!this._raffleEnded}>🏆</span>

@@ -1,29 +1,34 @@
-import {ReactiveController, ReactiveControllerHost} from 'lit';
+import {ReactiveController, LitElement} from 'lit';
 
 export class SaveController implements ReactiveController {
-    host: ReactiveControllerHost;
+    host: LitElement;
 
     menu: string;
 
-    constructor(host: ReactiveControllerHost, menu: string) {
+    constructor(host: LitElement, menu: string) {
         (this.host = host).addController(this);
         this.menu = menu;
     }
 
-    save(setup: { [key: string]: string[] }) {
-        let queryString = "?menu=" + this.menu;
+    async save(setup: { [key: string]: string[] }) {
+        const params = new URLSearchParams();
+        params.set('menu', this.menu);
 
-        for (var key in setup) {
-            queryString += "&" + key + "=" + setup[key].join(";");
+        for (const [key, value] of Object.entries(setup)) {
+            params.set(key, value.join(';'));
         }
 
-        let rafflrUrl = window.location.origin + queryString;
-    
-        navigator.clipboard.writeText(rafflrUrl).then(function() {
-            console.info('Rafflr URL copied to clipboard');
-        }, function() {
-            console.warn('Failed to copy Rafflr URL to clipboard');
-        });
+        let rafflrUrl = window.location.origin + "?" + params.toString();
+
+        await navigator.clipboard.writeText(rafflrUrl);
+        
+        this.host.dispatchEvent(new CustomEvent('setup-saved', {
+            detail: {
+                message: "Link with current setup copied to clipboard"
+            },
+            bubbles: true,
+            composed: true
+        }));
     }
     
     hostConnected() {

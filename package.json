@@ -10,6 +10,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@microsoft/fast-components": "^2.30.6",
         "canvas-confetti": "^1.6.0",
         "lit": "^2.6.1",
         "shufflr": "^2.0.16"
