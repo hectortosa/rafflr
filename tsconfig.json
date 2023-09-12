@@ -17,6 +17,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": false,
+    "skipLibCheck": true,
     "types": ["vite/client"],
     "plugins": [
       {

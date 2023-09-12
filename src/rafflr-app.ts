@@ -110,10 +110,13 @@ export class RafflrApp extends LitElement {
     ];
 
     @state()
-    private _selectedMenu: string = 'prize-raffle';
+    private _selectedMenu: string = "prize-raffle";
 
     @state()
     protected _showMenu: boolean = false;
+
+    @state()
+    protected _saveMessage: string = "";
 
     constructor() {
         super();
@@ -158,7 +161,7 @@ export class RafflrApp extends LitElement {
                 ${appSelected}
             </div>
             <footer>
-                <p id="save-confirmation-message" hidden>URL copied to clipboard</p>
+                <p id="save-confirmation-message" hidden>${this._saveMessage}</p>
             </footer>
         `;
     }
@@ -176,6 +179,7 @@ export class RafflrApp extends LitElement {
     }
 
     private _onSaved(e: CustomEvent) {
+        this._saveMessage = e.detail.message;
         const confirmationMessage = this.shadowRoot?.querySelector('#save-confirmation-message');
         confirmationMessage?.toggleAttribute('hidden');
         setTimeout(() => confirmationMessage?.toggleAttribute('hidden'), 1500);
