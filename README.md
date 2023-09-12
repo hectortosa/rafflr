@@ -17,7 +17,7 @@ You can add several entries at the same time separated by semi-colon `;`.
 
 ### Saving setup
 
-You can save your current setup by clicking in **Save** link. This will generate the url with the current setup and copy it to the clipboard (note this might not work on all borwsers if they don't support Clipboard API).
+You can save your current setup by clicking in **Copy setup** link. This will generate the URL with the current setup and copy it to the clipboard (note this might not work on all borwsers if they don't support Clipboard API).
 
 ## Raffle Prizes
 
