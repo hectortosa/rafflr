@@ -13,6 +13,8 @@ import './prize-raffle';
 import './lucky-one';
 import './shuffle-order';
 
+import githubSvgUrl from './assets/github-mark-white.svg';
+
 provideFluentDesignSystem()
     .register(
         fluentButton(),
@@ -46,6 +48,8 @@ export class RafflrApp extends LitElement {
         .header-left {
             order: 1;
             display: flex;
+            align-items: center;
+            padding: 0 16px;
         }
         .header-left-menu {
             order: 1;
@@ -53,9 +57,9 @@ export class RafflrApp extends LitElement {
             margin: 5px;
         }
         .header-left-title {
-            order: 2;
-            flex: 2;
-            margin: 5px;
+            order: 3;
+            flex: 3;
+            margin: 0 20px;
         }
         .header-main {
             order: 2;
@@ -65,14 +69,21 @@ export class RafflrApp extends LitElement {
             display: flex;
             flex-grow: 1;
             justify-content: flex-end;
+            align-items: center;
         }
         .end {
             align-self: flex-end;
             text-decoration: none;
+            font-size: 2em;
+            width: 50px;
         }
         .selected {
             font-weight: bold;
             font-style: italic;
+        }
+        .github-icon {
+            width: 35px;
+            height: 35px;
         }
         a {
             color: white;
@@ -149,8 +160,10 @@ export class RafflrApp extends LitElement {
                     <h1 class="header-left-title">Rafflr</h1>
                 </div>
                 <div class="header-right">
-                    <a class="end" target="_blank" href="https://github.com/hectortosa/rafflr" alt="Rafflr on GitHub">View on GitHub</a>
-                    <a class="end" target="_blank" href="https://github.com/hectortosa/rafflr/issues/new?assignees=hectortosa&labels=feature+request&projects=&template=request-new-feature.md&title=I+would+like+the+app+to+do..." alt="Request new feature">Suggest a feature</a>
+                    <a class="end" target="_blank" href="https://github.com/hectortosa/rafflr" alt="Rafflr on GitHub">
+                        <img class="github-icon" src=${githubSvgUrl} alt="Rafflr on GitHub" />
+                    </a>
+                    <a class="end" target="_blank" href="https://github.com/hectortosa/rafflr/issues/new?assignees=hectortosa&labels=feature+request&projects=&template=request-new-feature.md&title=I+would+like+the+app+to+do..." alt="Request new feature">💡</a>
                 </div>
             </header>
             <fluent-menu>
