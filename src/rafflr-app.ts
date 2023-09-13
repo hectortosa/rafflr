@@ -150,6 +150,7 @@ export class RafflrApp extends LitElement {
                 </div>
                 <div class="header-right">
                     <a class="end" target="_blank" href="https://github.com/hectortosa/rafflr" alt="Rafflr on GitHub">View on GitHub</a>
+                    <a class="end" target="_blank" href="https://github.com/hectortosa/rafflr/issues/new?assignees=hectortosa&labels=feature+request&projects=&template=request-new-feature.md&title=I+would+like+the+app+to+do..." alt="Request new feature">Request new feature</a>
                 </div>
             </header>
             <fluent-menu>
