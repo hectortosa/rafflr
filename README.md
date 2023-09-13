@@ -48,3 +48,9 @@ then
 ```bash
 pnpm run dev
 ```
+
+## :heart: Like the project?
+
+If you like this project (or [any other](https://github.com/hectortosa)) and want to help me contiue to improve it or create new ones, check my Ko-fi profile and consider buying me a Speciality Coffee:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H3P6FO7)
