@@ -1,6 +1,6 @@
 
 import { LitElement, html, css } from 'lit';
-import { customElement, state, property } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 
 import confetti from 'canvas-confetti';
 import { shuffle } from 'shufflr';
@@ -43,11 +43,11 @@ export class PrizeRaffle extends LitElement {
       }`
   ];
 
-  @property({ type: Array })
-  prizes:  Array<string> = [];
+  @state()
+  protected _prizes:  Array<string> = [];
 
-  @property({ type: Array })
-  participants:  Array<string> = [];
+  @state()
+  protected _participants:  Array<string> = [];
 
   @state()
   protected _results: Array<RaffleResult> = [];
@@ -65,11 +65,11 @@ export class PrizeRaffle extends LitElement {
     let initialPrizes = params.get("prizes")?.split(";");
 
     if (initialParticipants) {
-      this.participants = initialParticipants;
+      this._participants = initialParticipants;
     }
 
     if (initialPrizes) {
-      this.prizes = initialPrizes;
+      this._prizes = initialPrizes;
     }
   }
 
@@ -79,8 +79,8 @@ export class PrizeRaffle extends LitElement {
         <header>
           <h1>Prize Raffle</h1>
         </header>
-        <dynamic-list name="Prizes" .list=${this.prizes}></dynamic-list>
-        <dynamic-list name="Participants" .list=${this.participants}></dynamic-list>
+        <dynamic-list name="Prizes" .list=${this._prizes}></dynamic-list>
+        <dynamic-list name="Participants" .list=${this._participants}></dynamic-list>
         <footer>
           <button ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Raffle</button>
           <a @click=${this._save} part="button">Copy setup</a>
@@ -100,19 +100,19 @@ export class PrizeRaffle extends LitElement {
   }
 
   private _save() {
-    let setupToSave = { participants: this.participants, prizes: this.prizes };
+    let setupToSave = { participants: this._participants, prizes: this._prizes };
     this.saveController.save(setupToSave);
   }
 
   private _canRaffle(): boolean {
-    return this.prizes.length > 0 && this.participants.length > 1;
+    return this._prizes.length > 0 && this._participants.length > 1;
   }
 
   private _onItemsChanged(e: CustomEvent) {
     if (e.detail.name === "Prizes") {
-      this.prizes = e.detail.list;
+      this._prizes = e.detail.list;
     } else if (e.detail.name === "Participants") {
-      this.participants = e.detail.list;
+      this._participants = e.detail.list;
     }
   }
 
@@ -139,11 +139,11 @@ export class PrizeRaffle extends LitElement {
   private async _performRaffle() {
     let results: Array<RaffleResult> = new Array<RaffleResult>();
 
-    let unrollParticipants = this._buildParticipantsList(this.participants, this.prizes.length, "For sharing");
+    let unrollParticipants = this._buildParticipantsList(this._participants, this._prizes.length, "For sharing");
     const shuffledParticipants = shuffle(unrollParticipants);
-    const shuffledPrizes = shuffle(this.prizes);
+    const shuffledPrizes = shuffle(this._prizes);
 
-    for (var i = 0; i < this.prizes.length; i++) {
+    for (var i = 0; i < this._prizes.length; i++) {
       var currentWinner = results.find(element => element.winner === shuffledParticipants[i]);
 
       if (currentWinner) {

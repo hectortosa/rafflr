@@ -13,3 +13,20 @@ body {
         color: white;
     }
 }
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fixed-bottom {
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-container {
+    margin-right: 20px;
+}

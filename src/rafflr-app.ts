@@ -12,6 +12,7 @@ import { linkStyles } from './styles/link-styles';
 import './prize-raffle';
 import './lucky-one';
 import './shuffle-order';
+import './random-teams';
 
 import githubSvgUrl from './assets/github-mark-white.svg';
 
@@ -41,6 +42,7 @@ export class RafflrApp extends LitElement {
             background-color: #24d1db;
             color: white;
             height: 56px;
+            width: 90vw;
             align-items: center;
             box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
             padding: 16px;
@@ -148,6 +150,9 @@ export class RafflrApp extends LitElement {
             case 'shuffle-order':
                 appSelected = html`<shuffle-order></shuffle-order>`;
                 break;
+            case 'random-teams':
+                appSelected = html`<random-teams></random-teams>`;
+                break;
             default:
                 appSelected = html`<prize-raffle></prize-raffle>`;
                 break;
@@ -170,6 +175,7 @@ export class RafflrApp extends LitElement {
                 <fluent-menu-item id="price-raffle" @click=${this._menuItemSelected}>Price Raffle</fluent-menu-item>
                 <fluent-menu-item id="lucky-one" @click=${this._menuItemSelected}>Lucky One</fluent-menu-item>
                 <fluent-menu-item id="shuffle-order" @click=${this._menuItemSelected}>Shuffle Order</fluent-menu-item>
+                <fluent-menu-item id="random-teams" @click=${this._menuItemSelected}>Random Teams</fluent-menu-item>
             </fluent-menu>
             <div @setup-saved=${this._onSaved} class="content">
                 ${appSelected}

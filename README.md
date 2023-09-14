@@ -31,7 +31,13 @@ In this type of raffle, there is no need to add a list of prizes. The Lucky One 
 
 ## Shuffle Order
 
-This raffle will simply re-order the participants list. Simply add the participants and click on **Shuffle** button.
+This will simply re-order the participants list. Simply add the participants and click on **Shuffle** button.
+
+## Random Teams
+
+This will create random teams from the list of participants. The number of members per team is indicated with the _Team Size_ input. Simply add the desired team size, the participants, and click on **Team Up** button.
+
+If participants cannot be evenly distributed, the last team will have the remaining participants.
 
 ## Development
 
