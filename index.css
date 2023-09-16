@@ -1,6 +1,4 @@
 body {
-    margin: 10px;
-    padding: 10px;
     font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
     align-items: center;
     background-color: white;
@@ -29,4 +27,8 @@ body {
 
 .btn-container {
     margin-right: 20px;
+}
+
+rafflr-app {
+    width: 100%;
 }

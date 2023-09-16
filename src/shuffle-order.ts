@@ -11,7 +11,7 @@ import { linkStyles } from './styles/link-styles';
 import { SaveController } from './save-controller';
 
 import "./dynamic-list";
-import "./winner-panel";
+import "./result-panel";
 
 /**
  * Shuffle order of a list
@@ -84,7 +84,7 @@ export class ShuffleOrder extends LitElement {
         </footer>
         <!-- <div class="winners-panel">
           <span ?hidden=${!this._raffleEnded}>🎲</span>
-          <winner-panel ?hidden=${this._theLuckyOne == ""} winner=${this._theLuckyOne} .prizes=${[]}></winner-panel>
+          <result-panel ?hidden=${this._theLuckyOne == ""} title=${this._theLuckyOne} .result=${[]}></result-panel>
           <span ?hidden=${!this._raffleEnded}>🎲</span>
         </div> -->
       </div>

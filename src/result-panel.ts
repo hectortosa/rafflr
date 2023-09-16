@@ -1,14 +1,14 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-@customElement('winner-panel')
-export class WinnerPanel extends LitElement {
+@customElement('result-panel')
+export class ResultPanel extends LitElement {
     static styles = css`
       h4 {
         font-size: x-large;
         text-transform: capitalize;
       }
-      div.winner-panel {
+      div.result-panel {
         margin: 1em;
         padding: 1em;
         text-align: center;
@@ -23,19 +23,19 @@ export class WinnerPanel extends LitElement {
     `;
 
     @property({ type: String })
-    winner = "";
+    title = "";
 
     @property({ type: Array })
-    prizes: Array<string> = [];
+    result: Array<string> = [];
 
     override render() {
         return html`
-        <div class="winner-panel">
-        <h4>${this.winner}</h4>
-        ${this.prizes.map(
-            (prizeItem) =>
+        <div class="result-panel">
+        <h4>${this.title}</h4>
+        ${this.result.map(
+            (resultItem) =>
             html`
-                <div class="prize">${prizeItem}</div>
+                <div class="prize">${resultItem}</div>
             `
         )}
         </div>
@@ -45,6 +45,6 @@ export class WinnerPanel extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'winner-panel': WinnerPanel;
+        'result-panel': ResultPanel;
     }
 }

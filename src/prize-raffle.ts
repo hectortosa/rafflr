@@ -90,7 +90,7 @@ export class PrizeRaffle extends LitElement {
           ${this._results.map(
             (resultItem) =>
             html`
-                <winner-panel winner=${resultItem.winner} .prizes=${resultItem.prizes}></winner-panel> 
+                <result-panel title=${resultItem.winner} .result=${resultItem.prizes}></result-panel> 
             `
           )}
           <span ?hidden=${!this._raffleEnded}>🏆</span>

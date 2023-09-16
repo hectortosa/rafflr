@@ -5,7 +5,7 @@ import confetti from 'canvas-confetti';
 import { shuffle } from 'shufflr';
 
 import './dynamic-list';
-import './winner-panel';
+import './result-panel';
 import { SaveController } from './save-controller';
 
 import { buttonStyles } from './styles/button-styles';
@@ -99,7 +99,7 @@ export class RandomTeams extends LitElement {
               ${this._resultedTeams.map(
                 (resultItem) =>
                 html`
-                    <winner-panel winner=${resultItem.name} .prizes=${resultItem.members}></winner-panel> 
+                    <result-panel title=${resultItem.name} .result=${[resultItem.members,]}></result-panel> 
                 `
               )}
               <span ?hidden=${!this._teamUpEnded}>👥</span>
