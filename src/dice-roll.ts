@@ -131,7 +131,7 @@ export class DiceRoll extends LitElement {
     let diceCountBySides = new Map<string, number>();
 
     dices.forEach(dice => {
-      let diceType = "D" + dice.sides.toString();
+      let diceType = "d" + dice.sides.toString();
       let diceCount = diceCountBySides.get(diceType) || 0;
       diceCountBySides.set(diceType, diceCount + 1);
     });
@@ -146,7 +146,7 @@ export class DiceRoll extends LitElement {
   }
 
   private _onDiceSetupChange(e: Event) {
-    this._diceSetup = (e.target as HTMLInputElement).value.toLowerCase();
+    this._diceSetup = (e.target as HTMLInputElement).value;
     this._dices = this._generateDicesFromDiceSetup(this._diceSetup);
   }
 
@@ -158,7 +158,7 @@ export class DiceRoll extends LitElement {
  * @returns An array of dices.
  */
   private _generateDicesFromDiceSetup(diceSetup: string): Array<Dice> {
-    return diceSetup.split(";").map(dice => {
+    return diceSetup.toLowerCase().split(";").map(dice => {
       let diceParts = dice.split("d");
       return Array<Dice>(parseInt(diceParts[0], 10)).fill({ sides: parseInt(diceParts[1], 10), value: 1 });
     }).flat();
@@ -188,8 +188,8 @@ export class DiceRoll extends LitElement {
     let roll: Array<Dice> = new Array<Dice>();
 
     this._dices.forEach(dice => {
-      const myArray = Array(dice.sides).fill(0).map((_, index) => index + 1);
-      const result: number = shuffle(myArray)[0];
+      const diceSides = Array<number>(dice.sides).fill(0).map((_, index) => index + 1);
+      const result: number = shuffle(diceSides)[0];
 
       roll.push({ sides: dice.sides, value: result });
     });
