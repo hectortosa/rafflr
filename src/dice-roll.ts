@@ -19,7 +19,7 @@ import { inputStyles } from './styles/input-styles';
 
 provideFluentDesignSystem()
   .register(
-      fluentTooltip()
+    fluentTooltip()
   );
 
 declare class Dice {
@@ -103,7 +103,7 @@ export class DiceRoll extends LitElement {
               ${this._resultedRoll.map(
       (resultItem) =>
         html`
-                    <result-panel title=${"D" + resultItem.sides} .result=${Array(1).fill(resultItem.value)}></result-panel> 
+                    <result-panel title=${"d" + resultItem.sides} .result=${Array(1).fill(resultItem.value)}></result-panel> 
                 `
     )}
               <span ?hidden=${!this._rollEnded}>🎲</span>
@@ -145,23 +145,23 @@ export class DiceRoll extends LitElement {
     return diceSetupArray;
   }
 
-    /**
-   * Generates an array of dices from a quick setup string 
-   * of comma separated dice setup of format 2D20,
-   * where 2 is the number of dices and 20 is the number of sides.
-   * @param diceSetup The quick setup string.
-   * @returns An array of dices.
-   */
-    private _generateDicesFromDiceSetup(diceSetup: string): Array<Dice> {
-      return diceSetup.split(";").map(dice => {
-        let diceParts = dice.split("D");
-        return Array<Dice>(parseInt(diceParts[0], 10)).fill({ sides: parseInt(diceParts[1], 10), value: 1 });
-      }).flat();
-    }
-
   private _onDiceSetupChange(e: Event) {
-    this._diceSetup = (e.target as HTMLInputElement).value;
+    this._diceSetup = (e.target as HTMLInputElement).value.toLowerCase();
     this._dices = this._generateDicesFromDiceSetup(this._diceSetup);
+  }
+
+  /**
+ * Generates an array of dices from a quick setup string 
+ * of comma separated dice setup of format 2D20,
+ * where 2 is the number of dices and 20 is the number of sides.
+ * @param diceSetup The quick setup string.
+ * @returns An array of dices.
+ */
+  private _generateDicesFromDiceSetup(diceSetup: string): Array<Dice> {
+    return diceSetup.split(";").map(dice => {
+      let diceParts = dice.split("d");
+      return Array<Dice>(parseInt(diceParts[0], 10)).fill({ sides: parseInt(diceParts[1], 10), value: 1 });
+    }).flat();
   }
 
   private _sleep(millis: number) {

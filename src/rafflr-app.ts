@@ -201,6 +201,11 @@ export class RafflrApp extends LitElement {
         this._selectedMenu = menuItem.id;
         const menu = this.shadowRoot?.querySelector('fluent-menu');
         menu?.classList.toggle('show');
+
+        // Update the URL
+        const url = new URL(window.location.href);
+        url.searchParams.set('menu', this._selectedMenu);
+        window.history.pushState({}, '', url.toString());
     }
 
     private _onSaved(e: CustomEvent) {
@@ -213,6 +218,6 @@ export class RafflrApp extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-      'rafflr-app': RafflrApp;
+        'rafflr-app': RafflrApp;
     }
-  }
+}
