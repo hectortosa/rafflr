@@ -43,7 +43,7 @@ If participants cannot be evenly distributed, the last team will have the remain
 
 This will simulate a dice roll. You can configure the number of dices and the sides of them using [standard dice notation](https://en.wikipedia.org/wiki/Dice_notation) in the _Dice Setup_ input. To use more than one type od dice, enter more than one standard notation separated by colon `;`.
 
-For example, to roll 2 dices with 6 sides each, plus 1 dice of 20 sides, you would enter `2D6;1D20` in the _Dice Setup_ input.
+For example, to roll 2 dices with 6 sides each, plus 1 dice of 20 sides, you would enter `2d6;1d20` in the _Dice Setup_ input.
 
 ## Development
 

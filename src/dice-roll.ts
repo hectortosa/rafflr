@@ -76,7 +76,7 @@ export class DiceRoll extends LitElement {
     super();
 
     let params = new URLSearchParams(window.location.search);
-    this._diceSetup = params.get("diceSetup") || "1D6";
+    this._diceSetup = params.get("diceSetup") || "2d6;1d20";
     let initialDices = this._generateDicesFromDiceSetup(this._diceSetup);
 
     if (initialDices) {
