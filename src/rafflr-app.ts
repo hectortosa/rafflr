@@ -1,21 +1,20 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
 import {
-    provideFluentDesignSystem,
     fluentButton,
     fluentMenu,
-    fluentMenuItem
+    fluentMenuItem,
+    provideFluentDesignSystem
 } from "@fluentui/web-components";
+import { LitElement, css, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
+import { shuffle } from 'shufflr';
+import githubSvgUrl from './assets/github-mark-white.svg';
+import './dice-roll';
+import './lucky-one';
+import './prize-raffle';
+import './random-teams';
+import './shuffle-order';
 import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
-
-import './prize-raffle';
-import './lucky-one';
-import './shuffle-order';
-import './random-teams';
-import './dice-roll';
-
-import githubSvgUrl from './assets/github-mark-white.svg';
 
 provideFluentDesignSystem()
     .register(
@@ -106,13 +105,13 @@ export class RafflrApp extends LitElement {
             justify-content: space-around;
         }
         fluent-menu {
-            opacity: 0;
+            display: none;
             background-color: #24d1db;
             position: absolute;
             transition: opacity 0.3s ease-in-out;
         }
         fluent-menu.show {
-            opacity: 1;
+            display: block;
         }
         fluent-menu-item {
             background-color: #24d1db;
@@ -132,10 +131,18 @@ export class RafflrApp extends LitElement {
     @state()
     protected _saveMessage: string = "";
 
+    protected _menuItems: Array<string> = [
+        'dice-roll',
+        'lucky-one',
+        'prize-raffle',
+        'random-teams',
+        'shuffle-order'
+    ];
+
     constructor() {
         super();
         let params = new URLSearchParams(window.location.search);
-        this._selectedMenu = params.get('menu') || 'prize-raffle';
+        this._selectedMenu = params.get('menu') || shuffle(this._menuItems)[0];
     }
 
     override render() {
@@ -176,11 +183,11 @@ export class RafflrApp extends LitElement {
                 </div>
             </header>
             <fluent-menu>
-                <fluent-menu-item id="price-raffle" @click=${this._menuItemSelected}>Price Raffle</fluent-menu-item>
-                <fluent-menu-item id="lucky-one" @click=${this._menuItemSelected}>Lucky One</fluent-menu-item>
-                <fluent-menu-item id="shuffle-order" @click=${this._menuItemSelected}>Shuffle Order</fluent-menu-item>
-                <fluent-menu-item id="random-teams" @click=${this._menuItemSelected}>Random Teams</fluent-menu-item>
                 <fluent-menu-item id="dice-roll" @click=${this._menuItemSelected}>Dice Roll</fluent-menu-item>
+                <fluent-menu-item id="lucky-one" @click=${this._menuItemSelected}>Lucky One</fluent-menu-item>
+                <fluent-menu-item id="price-raffle" @click=${this._menuItemSelected}>Price Raffle</fluent-menu-item>
+                <fluent-menu-item id="random-teams" @click=${this._menuItemSelected}>Random Teams</fluent-menu-item>
+                <fluent-menu-item id="shuffle-order" @click=${this._menuItemSelected}>Shuffle Order</fluent-menu-item>
             </fluent-menu>
             <div @setup-saved=${this._onSaved} class="content">
                 ${appSelected}
