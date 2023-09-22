@@ -91,7 +91,7 @@ export class RandomTeams extends LitElement {
             </div>
             <dynamic-list name="Participants" .list=${this._participants}></dynamic-list>
             <footer>
-              <button ?disabled=${!this._canTeamUp()} @click=${this._runWithDelay}>Team Up</button>
+              <button id="random-teams-run" ?disabled=${!this._canTeamUp()} @click=${this._runWithDelay}>Team Up</button>
               <a @click=${this._save} part="button">Copy setup</a>
             </footer>
             <div class="winners-panel">

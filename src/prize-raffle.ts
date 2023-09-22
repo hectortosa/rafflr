@@ -82,7 +82,7 @@ export class PrizeRaffle extends LitElement {
         <dynamic-list name="Prizes" .list=${this._prizes}></dynamic-list>
         <dynamic-list name="Participants" .list=${this._participants}></dynamic-list>
         <footer>
-          <button ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Raffle</button>
+          <button id="prize-raffle-run" ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Raffle</button>
           <a @click=${this._save} part="button">Copy setup</a>
         </footer>
         <div class="winners-panel">

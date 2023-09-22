@@ -13,7 +13,9 @@ This is a simple app to do Raffles.
 
 ### Adding multiple items
 
-You can add several entries at the same time separated by semi-colon `;`.
+Every list of participants, prices, team members, etc, supports pasting a list of items, using each line of the content pasted as an item to add to the list. It will also use semi-colon `;` as item separator.
+
+You can also add several entries at the same time by writing them in one go separated by semi-colon `;`.
 
 ### Saving setup
 

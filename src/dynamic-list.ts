@@ -62,28 +62,34 @@ export class DynamicList extends LitElement {
               <div class="list-item">${listItem}</div>
             `
         )}
-        <input @keypress=${this._onEnter}>
+        <input @keypress=${this._onKeyPress} @paste=${this._onPaste}>
         <a @click=${this._onClick} part="button">Add</a>
       </div>
     `;
   }
 
   private _onClick() {
-    this._addNewItem(this._input.value);
+    this._addItems(this._input.value);
   }
 
-  private _onEnter (e: KeyboardEvent) {
+  private _onPaste(e: ClipboardEvent) {
+    const rawPasteData: string = e.clipboardData?.getData("text") ?? "";
+    this._addItems(rawPasteData);
+    e.preventDefault();
+  }
+  
+  private _onKeyPress (e: KeyboardEvent) {
     if (e.key === 'Enter') {
-      this._addNewItem(this._input.value);
+      this._addItems(this._input.value);
     }
   }
 
-  private _addNewItem(item: string) {
-    if (!item || item.length == 0) {
+  private _addItems(input: string) {
+    if (!input || input.length == 0) {
       return;
     }
 
-    const itemsToAdd = item.split(';');
+    const itemsToAdd = input.split(/[\r?\n;]+/);
     this.list = this.list.concat(itemsToAdd);
 
     const options = {

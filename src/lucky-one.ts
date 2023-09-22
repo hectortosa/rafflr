@@ -75,7 +75,7 @@ export class LuckyOne extends LitElement {
         </header>
         <dynamic-list name="Participants" .list=${this._participants}></dynamic-list>
         <footer>
-          <button ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Pick one</button>
+          <button id="lucky-one-run" ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Pick one</button>
           <a @click=${this._save} part="button">Copy setup</a>
         </footer>
         <div class="winners-panel">

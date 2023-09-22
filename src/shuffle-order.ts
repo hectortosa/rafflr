@@ -79,7 +79,7 @@ export class ShuffleOrder extends LitElement {
           <span ?hidden=${!this._raffleEnded}>🎲</span>
         </div>
         <footer>
-          <button ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Shuffle</button>
+          <button id="shuffle-order-run" ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Shuffle</button>
           <a @click=${this._save} part="button">Copy setup</a>
         </footer>
         <!-- <div class="winners-panel">
