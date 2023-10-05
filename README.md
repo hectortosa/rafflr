@@ -21,19 +21,23 @@ You can also add several entries at the same time by writing them in one go sepa
 
 You can save your current setup by clicking in **Copy setup** link. This will generate the URL with the current setup and copy it to the clipboard (note this might not work on all borwsers if they don't support Clipboard API).
 
+## Dice Roll
+
+This will simulate a dice roll. You can configure the number of dices and the sides of them using [standard dice notation](https://en.wikipedia.org/wiki/Dice_notation) in the _Dice Setup_ input. To use more than one type od dice, enter more than one standard notation separated by colon `;`.
+
+For example, to roll 2 dices with 6 sides each, plus 1 dice of 20 sides, you would enter `2d6;1d20` in the _Dice Setup_ input.
+
+## Lucky One
+
+This will randomly pick one item from the list of _Participants_. If _Remove pick_ is checked, the picked item from the _Participants_ list will be removed and picked will be kept.
+
+_Copy setup_ will also copy the list of picked items if _Remove pick_ is checked.
+
 ## Raffle Prizes
 
 To use it, just add as many prizes and participants as you want by simply entering the value and pressing `Enter` or click `Add`. Press **Raffle** button to perform the raffle.
 
 When the Raffle is performed, if there are more prizes than participants, and prizes cannot be equitably assigned to all participants, some prizes will be **To Share**, because sharing is caring.
-
-## Lucky One
-
-In this type of raffle, there is no need to add a list of prizes. The Lucky One will be selected randomly from the list of participants.
-
-## Shuffle Order
-
-This will simply re-order the participants list. Simply add the participants and click on **Shuffle** button.
 
 ## Random Teams
 
@@ -41,11 +45,9 @@ This will create random teams from the list of participants. The number of membe
 
 If participants cannot be evenly distributed, the last team will have the remaining participants.
 
-## Dice Roll
+## Shuffle Order
 
-This will simulate a dice roll. You can configure the number of dices and the sides of them using [standard dice notation](https://en.wikipedia.org/wiki/Dice_notation) in the _Dice Setup_ input. To use more than one type od dice, enter more than one standard notation separated by colon `;`.
-
-For example, to roll 2 dices with 6 sides each, plus 1 dice of 20 sides, you would enter `2d6;1d20` in the _Dice Setup_ input.
+This will simply re-order the participants list. Simply add the participants and click on **Shuffle** button.
 
 ## Development
 

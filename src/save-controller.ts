@@ -10,12 +10,16 @@ export class SaveController implements ReactiveController {
         this.menu = menu;
     }
 
-    async save(setup: { [key: string]: string[] }) {
+    async save(setup: { [key: string]: string[] | string | boolean }) {
         const params = new URLSearchParams();
         params.set('menu', this.menu);
 
         for (const [key, value] of Object.entries(setup)) {
-            params.set(key, value.join(';'));
+            if (Array.isArray(value)) {
+                params.set(key, value.join(';'));
+            } else {
+                params.set(key, value.toString());
+            }
         }
 
         let rafflrUrl = window.location.origin + "?" + params.toString();
