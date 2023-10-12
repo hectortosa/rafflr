@@ -12,7 +12,6 @@ export class SaveController implements ReactiveController {
 
     async save(setup: { [key: string]: string[] | string | boolean }) {
         const params = new URLSearchParams();
-        params.set('menu', this.menu);
 
         for (const [key, value] of Object.entries(setup)) {
             if (Array.isArray(value)) {
@@ -22,7 +21,7 @@ export class SaveController implements ReactiveController {
             }
         }
 
-        let rafflrUrl = window.location.origin + "?" + params.toString();
+        let rafflrUrl = window.location.origin + "/" + this.menu + "?" + params.toString();
 
         await navigator.clipboard.writeText(rafflrUrl);
         

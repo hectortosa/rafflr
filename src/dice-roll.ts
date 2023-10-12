@@ -86,7 +86,7 @@ export class DiceRoll extends LitElement {
 
   override render() {
     return html`
-          <div}>
+          <div>
             <header>
               <h1>Dice Roll</h1>
             </header>
@@ -101,11 +101,11 @@ export class DiceRoll extends LitElement {
             <div class="winners-panel">
               <span ?hidden=${!this._rollEnded}>🎲</span>
               ${this._resultedRoll.map(
-      (resultItem) =>
-        html`
+                (resultItem) =>
+                  html`
                     <result-panel title=${"d" + resultItem.sides} .result=${Array(1).fill(resultItem.value)}></result-panel> 
-                `
-    )}
+                  `
+              )}
               <span ?hidden=${!this._rollEnded}>🎲</span>
             </div>
           </div>

@@ -141,8 +141,8 @@ export class RafflrApp extends LitElement {
 
     constructor() {
         super();
-        let params = new URLSearchParams(window.location.search);
-        this._selectedMenu = params.get('menu') || shuffle(this._menuItems)[0];
+        // Get the last part of the pathname as the selected menu
+        this._selectedMenu = window.location.pathname.split('/').pop() || shuffle(this._menuItems)[0];
     }
 
     override render() {
@@ -206,12 +206,12 @@ export class RafflrApp extends LitElement {
     private _menuItemSelected(e: CustomEvent) {
         const menuItem = (e.target as HTMLLinkElement);
         this._selectedMenu = menuItem.id;
-        const menu = this.shadowRoot?.querySelector('fluent-menu');
-        menu?.classList.toggle('show');
+
+        this._toggleMenu();
 
         // Update the URL
         const url = new URL(window.location.href);
-        url.searchParams.set('menu', this._selectedMenu);
+        url.pathname = '/' + this._selectedMenu;
         window.history.pushState({}, '', url.toString());
     }
 
