@@ -2,7 +2,7 @@
     "name": "rafflr-app",
     "version": "3.5.0",
     "description": "",
-    "icon": "src/assets/rnd.svg",
+    "icon": "src/assets/favicon.ico",
     "license": "MIT",
     "scripts": {
         "dev": "vite",

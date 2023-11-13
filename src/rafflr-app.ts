@@ -51,17 +51,21 @@ export class RafflrApp extends LitElement {
             order: 1;
             display: flex;
             align-items: center;
-            padding: 0 16px;
         }
         .header-left-menu {
             order: 1;
             flex: 1;
-            margin: 5px;
+            margin-left: 10px;
+        }
+        .header-left-logo {
+            order: 2;
+            margin-left: 20px;
+            height: 40px;
         }
         .header-left-title {
             order: 3;
-            flex: 3;
-            margin: 0 20px;
+            flex: 1;
+            margin-left: 20px;
         }
         .header-main {
             order: 2;
@@ -173,6 +177,7 @@ export class RafflrApp extends LitElement {
             <header>
                 <div class="header-left">
                     <fluent-button class="header-left-menu" @click=${this._toggleMenu}>Menu</fluent-button>
+                    <img class="header-left-logo" src="src/assets/rafflr-no-bg.png" alt="Rafflr Logo">
                     <h1 class="header-left-title">Rafflr</h1>
                 </div>
                 <div class="header-right">
