@@ -1,8 +1,7 @@
 {
     "trailingSlash": "auto",
-    "routes": [
-      {
-        "route": "/*"
-      }
-    ]
+    "navigationFallback":{
+        "rewrite": "/index.html",
+        "exclude": ["/assets/*"]
+    }
   }
