@@ -8,6 +8,7 @@ import { LitElement, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { shuffle } from 'shufflr';
 import githubSvgUrl from './assets/github-mark-white.svg';
+import rafflrNoBgUrl from './assets/rafflr-no-bg.png';
 import './dice-roll';
 import './lucky-one';
 import './prize-raffle';
@@ -177,7 +178,7 @@ export class RafflrApp extends LitElement {
             <header>
                 <div class="header-left">
                     <fluent-button class="header-left-menu" @click=${this._toggleMenu}>Menu</fluent-button>
-                    <img class="header-left-logo" src="src/assets/rafflr-no-bg.png" alt="Rafflr Logo">
+                    <img class="header-left-logo" src=${rafflrNoBgUrl} alt="Rafflr Logo">
                     <h1 class="header-left-title">Rafflr</h1>
                 </div>
                 <div class="header-right">
