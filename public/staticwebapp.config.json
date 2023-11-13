@@ -1,0 +1,8 @@
+{
+    "trailingSlash": "auto",
+    "routes": [
+      {
+        "route": "/*"
+      }
+    ]
+  }
