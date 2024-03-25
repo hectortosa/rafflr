@@ -15,8 +15,8 @@ dependencies:
     specifier: ^2.7.0 || ^3.0.0
     version: 2.8.0
   shufflr:
-    specifier: ^2.0.17
-    version: 2.0.17
+    specifier: ^2.0.18
+    version: 2.0.18
 
 devDependencies:
   '@types/canvas-confetti':
@@ -375,8 +375,8 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /shufflr@2.0.17:
-    resolution: {integrity: sha512-YS4JjZ7yCjeFTH8my5gUAmR6++G5ijpVMuFim1VuPx5o68qi/JMg2HCPjb5+AMddXeRbhA1Cr6vHMz0uuKBhsg==}
+  /shufflr@2.0.18:
+    resolution: {integrity: sha512-uw4MHyBaRXh0A3vschHvkWQbjvTFr4jltdm/z7FYr7AtBJqSGn4ngFqE63hhx3bXgNPIByX7bpxN4kq0c57odQ==}
     dev: false
 
   /source-map-js@1.0.2:
