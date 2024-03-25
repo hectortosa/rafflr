@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@fluentui/web-components':
-    specifier: ^2.5.16
-    version: 2.5.16
+    specifier: ^2.5.17
+    version: 2.5.17
   canvas-confetti:
     specifier: ^1.6.0
     version: 1.6.0
@@ -229,12 +229,12 @@ packages:
     dev: true
     optional: true
 
-  /@fluentui/web-components@2.5.16:
-    resolution: {integrity: sha512-Ur+DziCm2FtvQoRjx62DH069uTz/HTq0gk9uKmW8K7bmxCS7fYYpV9GFEnK7QdEbdRHyUINE3uFfLEcL6IY3Xg==}
+  /@fluentui/web-components@2.5.17:
+    resolution: {integrity: sha512-EUIgePoUK02eGft898wI4C7rJp4dQG4vzRG+cZc+a+FZeL1fjne6qb9F9RjUf7PxBt5B/w0MWoXA7tzcKo1gKw==}
     dependencies:
       '@microsoft/fast-colors': 5.3.1
       '@microsoft/fast-element': 1.12.0
-      '@microsoft/fast-foundation': 2.49.1
+      '@microsoft/fast-foundation': 2.49.5
       '@microsoft/fast-web-utilities': 5.4.1
       tslib: 2.6.2
     dev: false
@@ -257,8 +257,8 @@ packages:
     resolution: {integrity: sha512-gQutuDHPKNxUEcQ4pypZT4Wmrbapus+P9s3bR/SEOLsMbNqNoXigGImITygI5zhb+aA5rzflM6O8YWkmRbGkPA==}
     dev: false
 
-  /@microsoft/fast-foundation@2.49.1:
-    resolution: {integrity: sha512-dSajlZeX+lkqjg4108XbIIhVLECgJTCG32bE8P6rNgo8XCPHVJBDiBejrF34lv5pO9Z2uGORZjeip/N0fPib+g==}
+  /@microsoft/fast-foundation@2.49.5:
+    resolution: {integrity: sha512-3PpG1BNmZ5kUM1goYU3SsxjsM2H7Rk0ZmpDJ7mnRhWDgKiM5SzJ02KvALRUqDrJQoeDnkW0Q2Q+r9SkEd68Gpg==}
     dependencies:
       '@microsoft/fast-element': 1.12.0
       '@microsoft/fast-web-utilities': 5.4.1

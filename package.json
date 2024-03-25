@@ -10,7 +10,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@fluentui/web-components": "^2.5.16",
+        "@fluentui/web-components": "^2.5.17",
         "canvas-confetti": "^1.6.0",
         "lit": "^2.7.0 || ^3.0.0",
         "shufflr": "^2.0.17"
