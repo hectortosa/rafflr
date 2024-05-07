@@ -99,7 +99,7 @@ export class RandomTeams extends LitElement {
               ${this._resultedTeams.map(
                 (resultItem) =>
                 html`
-                    <result-panel title=${resultItem.name} .result=${[resultItem.members,]}></result-panel> 
+                    <result-panel title=${resultItem.name} .result=${resultItem.members}></result-panel> 
                 `
               )}
               <span ?hidden=${!this._teamUpEnded}>👥</span>
