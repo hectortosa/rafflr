@@ -12,8 +12,8 @@ dependencies:
     specifier: ^1.9.3
     version: 1.9.3
   lit:
-    specifier: ^3.1.3
-    version: 3.1.3
+    specifier: ^3.1.4
+    version: 3.1.4
   shufflr:
     specifier: ^2.0.18
     version: 2.0.18
@@ -482,8 +482,8 @@ packages:
       '@types/trusted-types': 2.0.7
     dev: false
 
-  /lit@3.1.3:
-    resolution: {integrity: sha512-l4slfspEsnCcHVRTvaP7YnkTZEZggNFywLEIhQaGhYDczG+tu/vlgm/KaWIEjIp+ZyV20r2JnZctMb8LeLCG7Q==}
+  /lit@3.1.4:
+    resolution: {integrity: sha512-q6qKnKXHy2g1kjBaNfcoLlgbI3+aSOZ9Q4tiGa9bGYXq5RBXxkVTqTIVmP2VWMp29L4GyvCFm8ZQ2o56eUAMyA==}
     dependencies:
       '@lit/reactive-element': 2.0.4
       lit-element: 4.0.5
