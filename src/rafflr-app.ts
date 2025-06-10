@@ -11,7 +11,9 @@ import githubSvgUrl from './assets/github-mark-white.svg';
 import rafflrNoBgUrl from './assets/rafflr-no-bg.png';
 import './dice-roll';
 import './lucky-one';
+import './lucky-one-tickets';
 import './prize-raffle';
+import './prize-raffle-tickets';
 import './random-teams';
 import './shuffle-order';
 import { buttonStyles } from './styles/button-styles';
@@ -139,7 +141,9 @@ export class RafflrApp extends LitElement {
     protected _menuItems: Array<string> = [
         'dice-roll',
         'lucky-one',
+        'lucky-one-tickets',
         'prize-raffle',
+        'prize-raffle-tickets',
         'random-teams',
         'shuffle-order'
     ];
@@ -157,8 +161,14 @@ export class RafflrApp extends LitElement {
             case 'prize-raffle':
                 appSelected = html`<prize-raffle></prize-raffle>`;
                 break;
+            case 'prize-raffle-tickets':
+                appSelected = html`<prize-raffle-tickets></prize-raffle-tickets>`;
+                break;
             case 'lucky-one':
                 appSelected = html`<lucky-one></lucky-one>`;
+                break;
+            case 'lucky-one-tickets':
+                appSelected = html`<lucky-one-tickets></lucky-one-tickets>`;
                 break;
             case 'shuffle-order':
                 appSelected = html`<shuffle-order></shuffle-order>`;
@@ -191,7 +201,9 @@ export class RafflrApp extends LitElement {
             <fluent-menu>
                 <fluent-menu-item id="dice-roll" @click=${this._menuItemSelected}>Dice Roll</fluent-menu-item>
                 <fluent-menu-item id="lucky-one" @click=${this._menuItemSelected}>Lucky One</fluent-menu-item>
-                <fluent-menu-item id="price-raffle" @click=${this._menuItemSelected}>Price Raffle</fluent-menu-item>
+                <fluent-menu-item id="lucky-one-tickets" @click=${this._menuItemSelected}>Lucky One (Tickets)</fluent-menu-item>
+                <fluent-menu-item id="prize-raffle" @click=${this._menuItemSelected}>Prize Raffle</fluent-menu-item>
+                <fluent-menu-item id="prize-raffle-tickets" @click=${this._menuItemSelected}>Prize Raffle (Tickets)</fluent-menu-item>
                 <fluent-menu-item id="random-teams" @click=${this._menuItemSelected}>Random Teams</fluent-menu-item>
                 <fluent-menu-item id="shuffle-order" @click=${this._menuItemSelected}>Shuffle Order</fluent-menu-item>
             </fluent-menu>
