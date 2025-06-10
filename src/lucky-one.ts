@@ -1,4 +1,3 @@
-
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
@@ -11,6 +10,7 @@ import { linkStyles } from './styles/link-styles';
 import { SaveController } from './save-controller';
 
 import "./dynamic-list";
+import "./dynamic-list-with-tickets";
 import "./result-panel";
 
 /**
@@ -42,11 +42,23 @@ export class LuckyOne extends LitElement {
       }
       span {
         margin-block-start: 4em;
+      }
+      .mode-selector {
+        margin: 1em 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+      .mode-selector label {
+        cursor: pointer;
       }`
   ];
 
   @state()
   protected _participants = new Array<string>();
+
+  @state()
+  protected _participantsWithTickets = new Array<ParticipantWithTickets>();
 
   @state()
   protected _lastPick: string = "";
@@ -60,6 +72,9 @@ export class LuckyOne extends LitElement {
   @state()
   protected _raffleEnded: boolean = false;
 
+  @state()
+  protected _useTickets: boolean = false;
+
   private saveController: SaveController = new SaveController(this, "lucky-one");
 
   constructor() {
@@ -69,9 +84,21 @@ export class LuckyOne extends LitElement {
     let initialParticipants = params.get("participants")?.split(";");
     let removePick = params.get("removePick") == "true" ? true : false;
     let picked = params.get("picked")?.split(";");
+    let useTickets = params.get("useTickets") == "true" ? true : false;
 
     if (initialParticipants) {
-      this._participants = initialParticipants;
+      if (useTickets) {
+        // Parse participants with tickets format (name:tickets)
+        this._participantsWithTickets = initialParticipants.map(p => {
+          const parts = p.split(':');
+          if (parts.length === 2) {
+            return { name: parts[0], tickets: parseInt(parts[1]) || 1 };
+          }
+          return { name: p, tickets: 1 };
+        });
+      } else {
+        this._participants = initialParticipants;
+      }
     }
 
     if (removePick) {
@@ -82,6 +109,8 @@ export class LuckyOne extends LitElement {
       this._picked = picked;
       this._lastPick = this._picked[0];
     }
+
+    this._useTickets = useTickets;
   }
 
   override render() {
@@ -90,7 +119,16 @@ export class LuckyOne extends LitElement {
         <header>
           <h1>Lucky one</h1>
         </header>
-        <dynamic-list name="Participants" .list=${this._participants}></dynamic-list>
+        <div class="mode-selector">
+          <label>
+            <input type="checkbox" .checked=${this._useTickets} @change=${this._onUseTicketsChanged}>
+            Enable tickets (participants can have multiple entries)
+          </label>
+        </div>
+        ${this._useTickets 
+          ? html`<dynamic-list-with-tickets name="Participants" .list=${this._participantsWithTickets}></dynamic-list-with-tickets>`
+          : html`<dynamic-list name="Participants" .list=${this._participants}></dynamic-list>`
+        }
         <footer>
           <button id="lucky-one-run" ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Pick one</button>
           <div>
@@ -109,16 +147,28 @@ export class LuckyOne extends LitElement {
   }
 
   private async _save() {
-    let setupToSave = {
-      participants: this._participants,
-      picked: this._removePick ? this._picked : [],
-      removePick: this._removePick
+    let setupToSave: any = {
+      removePick: this._removePick,
+      useTickets: this._useTickets
     };
+
+    if (this._useTickets) {
+      setupToSave.participants = this._participantsWithTickets.map(p => `${p.name}:${p.tickets}`);
+    } else {
+      setupToSave.participants = this._participants;
+    }
+
+    if (this._removePick) {
+      setupToSave.picked = this._picked;
+    }
 
     await this.saveController.save(setupToSave);
   }
 
   private _canRaffle(): boolean {
+    if (this._useTickets) {
+      return this._participantsWithTickets.length > 1;
+    }
     return this._participants.length > 1;
   }
 
@@ -136,7 +186,13 @@ export class LuckyOne extends LitElement {
 
     if (this._removePick) {
       this._picked = this._picked.filter(picked => picked !== "FILLER");
-      this._participants = this._participants.filter(participant => participant !== this._lastPick);
+      
+      if (this._useTickets) {
+        this._participantsWithTickets = this._participantsWithTickets.filter(participant => participant.name !== this._lastPick);
+      } else {
+        this._participants = this._participants.filter(participant => participant !== this._lastPick);
+      }
+      
       this._picked.unshift(this._lastPick);
     }
     else {
@@ -154,14 +210,25 @@ export class LuckyOne extends LitElement {
   }
 
   private _getLuckyOne() {
-    let participantsToShuffle: Array<string> = this._participants;
+    let participantsToShuffle: Array<string> = [];
 
-    if (this._participants.length == 2) {
-      participantsToShuffle = new Array<string>();
+    if (this._useTickets) {
+      // Create a pool where each participant appears as many times as their ticket count
+      for (const participant of this._participantsWithTickets) {
+        for (let i = 0; i < participant.tickets; i++) {
+          participantsToShuffle.push(participant.name);
+        }
+      }
+    } else {
+      participantsToShuffle = [...this._participants];
+    }
 
+    // Handle case with only 2 participants
+    const uniqueParticipants = this._useTickets ? this._participantsWithTickets.length : this._participants.length;
+    if (uniqueParticipants === 2 && participantsToShuffle.length < 10) {
+      const originalPool = [...participantsToShuffle];
       for (let i = 0; i < 5; i++) {
-        participantsToShuffle.push(this._participants[0]);
-        participantsToShuffle.push(this._participants[1]);
+        participantsToShuffle = participantsToShuffle.concat(originalPool);
       }
     }
 
@@ -173,13 +240,34 @@ export class LuckyOne extends LitElement {
 
   private _onItemsChanged(e: CustomEvent) {
     if (e.detail.name === "Participants") {
-      this._participants = e.detail.list;
+      if (this._useTickets) {
+        this._participantsWithTickets = e.detail.list;
+      } else {
+        this._participants = e.detail.list;
+      }
     }
   }
 
   private _onRemovePickChanged(e: Event) {
     this._removePick = (e.target as HTMLInputElement).checked;
     console.log('Remove pick changed to: ' + this._removePick)
+  }
+
+  private _onUseTicketsChanged(e: Event) {
+    this._useTickets = (e.target as HTMLInputElement).checked;
+    
+    // Convert between formats when toggling
+    if (this._useTickets) {
+      // Convert simple participants to participants with tickets
+      this._participantsWithTickets = this._participants.map(name => ({ name, tickets: 1 }));
+      this._participants = [];
+    } else {
+      // Convert participants with tickets to simple participants
+      this._participants = this._participantsWithTickets.map(p => p.name);
+      this._participantsWithTickets = [];
+    }
+    
+    console.log('Use tickets changed to: ' + this._useTickets)
   }
 }
 
