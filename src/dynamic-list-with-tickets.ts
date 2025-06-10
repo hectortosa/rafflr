@@ -106,6 +106,27 @@ export class DynamicListWithTickets extends LitElement {
         font-size: 0.8em;
         color: #666;
         margin-top: 5px;
+      }
+      
+      /* Dark mode styles */
+      @media (prefers-color-scheme: dark) {
+        .edit-input,
+        .edit-tickets-input {
+          background-color: rgb(45, 45, 45);
+          border: 1px solid rgb(45, 45, 45);
+          color: rgb(230, 230, 230);
+        }
+        
+        .edit-input:focus,
+        .edit-tickets-input:focus {
+          background-color: rgb(240, 240, 240);
+          color: rgb(10, 10, 10);
+          border-color: #24d1db;
+        }
+        
+        .help-text {
+          color: #aaa;
+        }
       }`
   ];
 

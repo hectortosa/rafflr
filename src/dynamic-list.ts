@@ -77,6 +77,21 @@ export class DynamicList extends LitElement {
       }
       a.disabled {
         color: #e6e6e6;
+      }
+      
+      /* Dark mode styles */
+      @media (prefers-color-scheme: dark) {
+        .edit-input {
+          background-color: rgb(45, 45, 45);
+          border: 1px solid rgb(45, 45, 45);
+          color: rgb(230, 230, 230);
+        }
+        
+        .edit-input:focus {
+          background-color: rgb(240, 240, 240);
+          color: rgb(10, 10, 10);
+          border-color: #24d1db;
+        }
       }`
   ];
 

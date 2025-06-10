@@ -133,4 +133,18 @@ export const inputStyles = css`
         -webkit-rtl-ordering: logical;
         -webkit-border-image: none;
     }
+
+    /* Dark mode styles */
+    @media (prefers-color-scheme: dark) {
+        input {
+            background-color: rgb(45, 45, 45);
+            border-color: rgb(45, 45, 45);
+            color: rgb(230, 230, 230);
+        }
+        
+        input:focus {
+            background-color: rgb(240, 240, 240);
+            color: rgb(10, 10, 10);
+        }
+    }
 `;
