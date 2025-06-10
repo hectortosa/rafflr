@@ -28,22 +28,19 @@ export class DynamicList extends LitElement {
         text-align: center;
         vertical-align: top;
         display: inline-block;
-        width: 100%;
-        box-sizing: border-box;
       }
       div.list-item {
-        margin: 10px auto;
+        margin: 10px 0;
         text-align: center;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         gap: 10px;
         position: relative;
         transition: all 0.1s cubic-bezier(0.17, 0.67, 0.5, 0.71);
-        padding: 8px;
+        padding: 8px 12px;
         border-radius: 3px;
         border: 1px solid transparent;
-        max-width: 500px;
       }
       div.list-item:hover:not(.editing) {
         border-color: #24d1db;
@@ -57,6 +54,7 @@ export class DynamicList extends LitElement {
       .item-content {
         flex: 1;
         min-width: 0;
+        text-align: left;
       }
       .item-actions {
         display: flex;
@@ -92,6 +90,13 @@ export class DynamicList extends LitElement {
           color: rgb(10, 10, 10);
           border-color: #24d1db;
         }
+      }
+      .input-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
       }`
   ];
 
@@ -149,8 +154,10 @@ export class DynamicList extends LitElement {
               </div>
             `
         )}
-        <input id="add-input" @keypress=${this._onKeyPress} @paste=${this._onPaste}>
-        <a @click=${this._onClick} part="button">Add</a>
+        <div class="input-section">
+          <input id="add-input" @keypress=${this._onKeyPress} @paste=${this._onPaste}>
+          <a @click=${this._onClick} part="button">Add</a>
+        </div>
       </div>
     `;
   }

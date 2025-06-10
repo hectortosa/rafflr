@@ -28,22 +28,19 @@ export class DynamicListWithTickets extends LitElement {
         text-align: center;
         vertical-align: top;
         display: inline-block;
-        width: 100%;
-        box-sizing: border-box;
       }
       div.list-item {
-        margin: 10px auto;
+        margin: 10px 0;
         text-align: center;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         gap: 10px;
         position: relative;
         transition: all 0.1s cubic-bezier(0.17, 0.67, 0.5, 0.71);
-        padding: 8px;
+        padding: 8px 12px;
         border-radius: 3px;
         border: 1px solid transparent;
-        max-width: 500px;
       }
       div.list-item:hover:not(.editing) {
         border-color: #24d1db;
@@ -59,6 +56,7 @@ export class DynamicListWithTickets extends LitElement {
         align-items: center;
         gap: 10px;
         flex: 1;
+        text-align: left;
       }
       .ticket-count {
         background-color: #24d1db;
