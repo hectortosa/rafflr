@@ -1,4 +1,3 @@
-
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
@@ -11,6 +10,8 @@ import { linkStyles } from './styles/link-styles';
 import { SaveController } from './save-controller';
 
 import "./dynamic-list";
+import "./dynamic-list-with-tickets";
+import "./result-panel";
 
 /**
  * Raffle prices among participants
@@ -40,6 +41,15 @@ export class PrizeRaffle extends LitElement {
       }
       span {
         margin-block-start: 4em;
+      }
+      .mode-selector {
+        margin: 1em 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+      .mode-selector label {
+        cursor: pointer;
       }`
   ];
 
@@ -50,10 +60,16 @@ export class PrizeRaffle extends LitElement {
   protected _participants:  Array<string> = [];
 
   @state()
+  protected _participantsWithTickets: Array<ParticipantWithTickets> = [];
+
+  @state()
   protected _results: Array<RaffleResult> = [];
 
   @state()
   protected _raffleEnded: boolean = false;
+
+  @state()
+  protected _useTickets: boolean = false;
 
   private saveController: SaveController = new SaveController(this, "prize-raffle");
 
@@ -63,14 +79,28 @@ export class PrizeRaffle extends LitElement {
     let params = new URLSearchParams(window.location.search);
     let initialParticipants = params.get("participants")?.split(";");
     let initialPrizes = params.get("prizes")?.split(";");
+    let useTickets = params.get("useTickets") == "true" ? true : false;
 
     if (initialParticipants) {
-      this._participants = initialParticipants;
+      if (useTickets) {
+        // Parse participants with tickets format (name:tickets)
+        this._participantsWithTickets = initialParticipants.map(p => {
+          const parts = p.split(':');
+          if (parts.length === 2) {
+            return { name: parts[0], tickets: parseInt(parts[1]) || 1 };
+          }
+          return { name: p, tickets: 1 };
+        });
+      } else {
+        this._participants = initialParticipants;
+      }
     }
 
     if (initialPrizes) {
       this._prizes = initialPrizes;
     }
+
+    this._useTickets = useTickets;
   }
 
   override render() {
@@ -79,8 +109,17 @@ export class PrizeRaffle extends LitElement {
         <header>
           <h1>Prize Raffle</h1>
         </header>
+        <div class="mode-selector">
+          <label>
+            <input type="checkbox" .checked=${this._useTickets} @change=${this._onUseTicketsChanged}>
+            Enable tickets (participants can have multiple entries)
+          </label>
+        </div>
         <dynamic-list name="Prizes" .list=${this._prizes}></dynamic-list>
-        <dynamic-list name="Participants" .list=${this._participants}></dynamic-list>
+        ${this._useTickets 
+          ? html`<dynamic-list-with-tickets name="Participants" .list=${this._participantsWithTickets}></dynamic-list-with-tickets>`
+          : html`<dynamic-list name="Participants" .list=${this._participants}></dynamic-list>`
+        }
         <footer>
           <button id="prize-raffle-run" ?disabled=${!this._canRaffle()} @click=${this._runWithDelay}>Raffle</button>
           <a @click=${this._save} part="button">Copy setup</a>
@@ -100,20 +139,56 @@ export class PrizeRaffle extends LitElement {
   }
 
   private _save() {
-    let setupToSave = { participants: this._participants, prizes: this._prizes };
+    let setupToSave: any = { 
+      prizes: this._prizes,
+      useTickets: this._useTickets 
+    };
+
+    if (this._useTickets) {
+      setupToSave.participants = this._participantsWithTickets.map(p => `${p.name}:${p.tickets}`);
+    } else {
+      setupToSave.participants = this._participants;
+    }
+
     this.saveController.save(setupToSave);
   }
 
   private _canRaffle(): boolean {
-    return this._prizes.length > 0 && this._participants.length > 1;
+    if (this._prizes.length === 0) return false;
+    
+    if (this._useTickets) {
+      return this._participantsWithTickets.length > 1;
+    }
+    return this._participants.length > 1;
   }
 
   private _onItemsChanged(e: CustomEvent) {
     if (e.detail.name === "Prizes") {
       this._prizes = e.detail.list;
     } else if (e.detail.name === "Participants") {
-      this._participants = e.detail.list;
+      if (this._useTickets) {
+        this._participantsWithTickets = e.detail.list;
+      } else {
+        this._participants = e.detail.list;
+      }
     }
+  }
+
+  private _onUseTicketsChanged(e: Event) {
+    this._useTickets = (e.target as HTMLInputElement).checked;
+    
+    // Convert between formats when toggling
+    if (this._useTickets) {
+      // Convert simple participants to participants with tickets
+      this._participantsWithTickets = this._participants.map(name => ({ name, tickets: 1 }));
+      this._participants = [];
+    } else {
+      // Convert participants with tickets to simple participants
+      this._participants = this._participantsWithTickets.map(p => p.name);
+      this._participantsWithTickets = [];
+    }
+    
+    console.log('Use tickets changed to: ' + this._useTickets)
   }
 
   private sleep(millis: number) { 
@@ -139,7 +214,23 @@ export class PrizeRaffle extends LitElement {
   private async _performRaffle() {
     let results: Array<RaffleResult> = new Array<RaffleResult>();
 
-    let unrollParticipants = this._buildParticipantsList(this._participants, this._prizes.length, "For sharing");
+    // Create ticket pool based on mode
+    let ticketPool: Array<string> = [];
+    
+    if (this._useTickets) {
+      // Create a pool where each participant appears as many times as their ticket count
+      for (const participant of this._participantsWithTickets) {
+        for (let i = 0; i < participant.tickets; i++) {
+          ticketPool.push(participant.name);
+        }
+      }
+    } else {
+      // Equal chance for everyone
+      ticketPool = [...this._participants];
+    }
+
+    // Build expanded participants list if needed
+    let unrollParticipants = this._buildParticipantsList(ticketPool, this._prizes.length, "For sharing");
     const shuffledParticipants = shuffle(unrollParticipants);
     const shuffledPrizes = shuffle(this._prizes);
 
@@ -164,20 +255,20 @@ export class PrizeRaffle extends LitElement {
     this._results = results;
   }
 
-  private _buildParticipantsList(participants: Array<string>, numberOfPrizes: number, spareParticipant: string) {
+  private _buildParticipantsList(ticketPool: Array<string>, numberOfPrizes: number, spareParticipant: string) {
     let assignement;
     let toShare;
     let newParticipantsList = new Array<string>();
       
-    if (numberOfPrizes <= participants.length) {
-      return participants;
+    if (numberOfPrizes <= ticketPool.length) {
+      return ticketPool;
     }
   
-    assignement = Math.floor(numberOfPrizes / participants.length);
-    toShare = numberOfPrizes - (assignement * participants.length);
+    assignement = Math.floor(numberOfPrizes / ticketPool.length);
+    toShare = numberOfPrizes - (assignement * ticketPool.length);
     
     for (var i = 0; i < assignement; i++) {
-      newParticipantsList = newParticipantsList.concat(participants);
+      newParticipantsList = newParticipantsList.concat(ticketPool);
     }
     
     for (var j = 0; j < toShare; j++) {

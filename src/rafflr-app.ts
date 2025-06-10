@@ -191,7 +191,7 @@ export class RafflrApp extends LitElement {
             <fluent-menu>
                 <fluent-menu-item id="dice-roll" @click=${this._menuItemSelected}>Dice Roll</fluent-menu-item>
                 <fluent-menu-item id="lucky-one" @click=${this._menuItemSelected}>Lucky One</fluent-menu-item>
-                <fluent-menu-item id="price-raffle" @click=${this._menuItemSelected}>Price Raffle</fluent-menu-item>
+                <fluent-menu-item id="prize-raffle" @click=${this._menuItemSelected}>Prize Raffle</fluent-menu-item>
                 <fluent-menu-item id="random-teams" @click=${this._menuItemSelected}>Random Teams</fluent-menu-item>
                 <fluent-menu-item id="shuffle-order" @click=${this._menuItemSelected}>Shuffle Order</fluent-menu-item>
             </fluent-menu>
