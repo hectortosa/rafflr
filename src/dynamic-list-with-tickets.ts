@@ -36,6 +36,14 @@ export class DynamicListWithTickets extends LitElement {
         justify-content: center;
         align-items: center;
         gap: 10px;
+        position: relative;
+        transition: background-color 0.2s ease;
+        padding: 8px;
+        border-radius: 4px;
+      }
+      div.list-item:hover:not(.editing) {
+        background-color: #f0f0f0;
+        cursor: pointer;
       }
       .item-content {
         display: flex;
@@ -54,52 +62,14 @@ export class DynamicListWithTickets extends LitElement {
       .item-actions {
         display: flex;
         gap: 5px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
       }
-      .action-button {
-        cursor: pointer;
-        padding: 4px 8px;
-        font-size: 0.8em;
-        background-color: #f0f0f0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        color: #333;
-        transition: all 0.2s ease;
+      div.list-item:hover .item-actions {
+        opacity: 1;
       }
-      .action-button:hover {
-        background-color: #e0e0e0;
-        transform: translateY(-1px);
-      }
-      .edit-button {
-        background-color: #e3f2fd;
-        border-color: #1976d2;
-        color: #1976d2;
-      }
-      .edit-button:hover {
-        background-color: #bbdefb;
-      }
-      .delete-button {
-        background-color: #ffebee;
-        border-color: #d32f2f;
-        color: #d32f2f;
-      }
-      .delete-button:hover {
-        background-color: #ffcdd2;
-      }
-      .save-button {
-        background-color: #e8f5e9;
-        border-color: #388e3c;
-        color: #388e3c;
-      }
-      .save-button:hover {
-        background-color: #c8e6c9;
-      }
-      .cancel-button {
-        background-color: #fafafa;
-        border-color: #616161;
-        color: #616161;
-      }
-      .cancel-button:hover {
-        background-color: #f5f5f5;
+      div.list-item.editing .item-actions {
+        opacity: 1;
       }
       .edit-input {
         padding: 4px 8px;
@@ -164,7 +134,8 @@ export class DynamicListWithTickets extends LitElement {
         ${this.list.map(
           (participant, index) =>
             html`
-              <div class="list-item">
+              <div class="list-item ${this._editingIndex === index ? 'editing' : ''}" 
+                   @click=${() => this._editingIndex !== index && this._startEdit(index, participant)}>
                 ${this._editingIndex === index
                   ? html`
                       <input 
@@ -173,6 +144,7 @@ export class DynamicListWithTickets extends LitElement {
                         .value=${this._editName}
                         @input=${(e: Event) => this._editName = (e.target as HTMLInputElement).value}
                         @keypress=${(e: KeyboardEvent) => this._onEditKeyPress(e, index)}
+                        @click=${(e: Event) => e.stopPropagation()}
                         placeholder="Name"
                       />
                       <input 
@@ -182,11 +154,12 @@ export class DynamicListWithTickets extends LitElement {
                         .value=${this._editTickets}
                         @input=${(e: Event) => this._editTickets = parseInt((e.target as HTMLInputElement).value) || 1}
                         @keypress=${(e: KeyboardEvent) => this._onEditKeyPress(e, index)}
+                        @click=${(e: Event) => e.stopPropagation()}
                         placeholder="Tickets"
                       />
                       <div class="item-actions">
-                        <button class="action-button save-button" @click=${() => this._saveEdit(index)}>✓ Save</button>
-                        <button class="action-button cancel-button" @click=${() => this._cancelEdit()}>✗ Cancel</button>
+                        <a @click=${(e: Event) => { e.stopPropagation(); this._saveEdit(index); }} part="button">Save</a>
+                        <a @click=${(e: Event) => { e.stopPropagation(); this._cancelEdit(); }} part="button">Cancel</a>
                       </div>
                     `
                   : html`
@@ -195,8 +168,8 @@ export class DynamicListWithTickets extends LitElement {
                         <span class="ticket-count">${participant.tickets} ticket${participant.tickets > 1 ? 's' : ''}</span>
                       </div>
                       <div class="item-actions">
-                        <button class="action-button edit-button" @click=${() => this._startEdit(index, participant)}>✏️ Edit</button>
-                        <button class="action-button delete-button" @click=${() => this._deleteItem(index)}>🗑️ Delete</button>
+                        <a @click=${(e: Event) => { e.stopPropagation(); this._startEdit(index, participant); }} part="button">Edit</a>
+                        <a @click=${(e: Event) => { e.stopPropagation(); this._deleteItem(index); }} part="button">Remove</a>
                       </div>
                     `
                 }
