@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 
 import { buttonStyles } from './styles/button-styles.js';
 import { linkStyles } from './styles/link-styles.js';
@@ -32,7 +32,69 @@ export class DynamicList extends LitElement {
       div.list-item {
         margin: 10px;
         text-align: center;
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+      .item-content {
+        flex: 1;
+        min-width: 0;
+      }
+      .item-actions {
+        display: flex;
+        gap: 5px;
+      }
+      .action-button {
+        cursor: pointer;
+        padding: 4px 8px;
+        font-size: 0.8em;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #333;
+        transition: all 0.2s ease;
+      }
+      .action-button:hover {
+        background-color: #e0e0e0;
+        transform: translateY(-1px);
+      }
+      .edit-button {
+        background-color: #e3f2fd;
+        border-color: #1976d2;
+        color: #1976d2;
+      }
+      .edit-button:hover {
+        background-color: #bbdefb;
+      }
+      .delete-button {
+        background-color: #ffebee;
+        border-color: #d32f2f;
+        color: #d32f2f;
+      }
+      .delete-button:hover {
+        background-color: #ffcdd2;
+      }
+      .save-button {
+        background-color: #e8f5e9;
+        border-color: #388e3c;
+        color: #388e3c;
+      }
+      .save-button:hover {
+        background-color: #c8e6c9;
+      }
+      .cancel-button {
+        background-color: #fafafa;
+        border-color: #616161;
+        color: #616161;
+      }
+      .cancel-button:hover {
+        background-color: #f5f5f5;
+      }
+      .edit-input {
+        flex: 1;
+        padding: 4px 8px;
+        font-size: 1em;
       }
       a.disabled {
         color: #e6e6e6;
@@ -45,7 +107,13 @@ export class DynamicList extends LitElement {
   @property({ type: Array })
   list: Array<string> = [];
 
-  @query('input', true)
+  @state()
+  private _editingIndex: number = -1;
+
+  @state()
+  private _editValue: string = "";
+
+  @query('#add-input', true)
   _input!: HTMLInputElement;
 
   connectedCallback(): void {
@@ -57,12 +125,35 @@ export class DynamicList extends LitElement {
       <div class="dynamic-list">
         <h3>${this.name}</h3>
         ${this.list.map(
-          (listItem) =>
+          (listItem, index) =>
             html`
-              <div class="list-item">${listItem}</div>
+              <div class="list-item">
+                ${this._editingIndex === index
+                  ? html`
+                      <input 
+                        class="edit-input"
+                        type="text" 
+                        .value=${this._editValue}
+                        @input=${(e: Event) => this._editValue = (e.target as HTMLInputElement).value}
+                        @keypress=${(e: KeyboardEvent) => this._onEditKeyPress(e, index)}
+                      />
+                      <div class="item-actions">
+                        <button class="action-button save-button" @click=${() => this._saveEdit(index)}>✓ Save</button>
+                        <button class="action-button cancel-button" @click=${() => this._cancelEdit()}>✗ Cancel</button>
+                      </div>
+                    `
+                  : html`
+                      <div class="item-content">${listItem}</div>
+                      <div class="item-actions">
+                        <button class="action-button edit-button" @click=${() => this._startEdit(index, listItem)}>✏️ Edit</button>
+                        <button class="action-button delete-button" @click=${() => this._deleteItem(index)}>🗑️ Delete</button>
+                      </div>
+                    `
+                }
+              </div>
             `
         )}
-        <input @keypress=${this._onKeyPress} @paste=${this._onPaste}>
+        <input id="add-input" @keypress=${this._onKeyPress} @paste=${this._onPaste}>
         <a @click=${this._onClick} part="button">Add</a>
       </div>
     `;
@@ -84,14 +175,64 @@ export class DynamicList extends LitElement {
     }
   }
 
+  private _onEditKeyPress(e: KeyboardEvent, index: number) {
+    if (e.key === 'Enter') {
+      this._saveEdit(index);
+    } else if (e.key === 'Escape') {
+      this._cancelEdit();
+    }
+  }
+
+  private _startEdit(index: number, value: string) {
+    this._editingIndex = index;
+    this._editValue = value;
+    // Focus the input after render
+    this.updateComplete.then(() => {
+      const editInput = this.shadowRoot?.querySelector('.edit-input') as HTMLInputElement;
+      if (editInput) {
+        editInput.focus();
+        editInput.select();
+      }
+    });
+  }
+
+  private _saveEdit(index: number) {
+    if (this._editValue.trim() && this._editValue !== this.list[index]) {
+      this.list = [
+        ...this.list.slice(0, index),
+        this._editValue.trim(),
+        ...this.list.slice(index + 1)
+      ];
+      this._dispatchListChanged();
+    }
+    this._cancelEdit();
+  }
+
+  private _cancelEdit() {
+    this._editingIndex = -1;
+    this._editValue = "";
+  }
+
+  private _deleteItem(index: number) {
+    if (confirm(`Are you sure you want to delete "${this.list[index]}"?`)) {
+      this.list = this.list.filter((_, i) => i !== index);
+      this._dispatchListChanged();
+    }
+  }
+
   private _addItems(input: string) {
     if (!input || input.length == 0) {
       return;
     }
 
-    const itemsToAdd = input.split(/[\r?\n;]+/);
+    const itemsToAdd = input.split(/[\r?\n;]+/).filter(item => item.trim());
     this.list = this.list.concat(itemsToAdd);
+    this._dispatchListChanged();
 
+    this._input.value = '';
+  }
+
+  private _dispatchListChanged() {
     const options = {
       detail: { name: this.name, list: this.list},
       bubbles: true,
@@ -99,8 +240,6 @@ export class DynamicList extends LitElement {
     };
 
     this.dispatchEvent(new CustomEvent('list-changed', options));
-
-    this._input.value = '';
   }
 }
 
