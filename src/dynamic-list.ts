@@ -28,22 +28,31 @@ export class DynamicList extends LitElement {
         text-align: center;
         vertical-align: top;
         display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
       }
       div.list-item {
-        margin: 10px;
+        margin: 10px auto;
         text-align: center;
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 10px;
         position: relative;
-        transition: background-color 0.2s ease;
+        transition: all 0.1s cubic-bezier(0.17, 0.67, 0.5, 0.71);
         padding: 8px;
-        border-radius: 4px;
+        border-radius: 3px;
+        border: 1px solid transparent;
+        max-width: 500px;
       }
       div.list-item:hover:not(.editing) {
-        background-color: #f0f0f0;
+        border-color: #24d1db;
+        box-shadow: #24d1db 1px 1px 0px 0px;
         cursor: pointer;
+      }
+      div.list-item.editing {
+        border-color: #24d1db;
+        box-shadow: #24d1db 1px 1px 0px 0px;
       }
       .item-content {
         flex: 1;
@@ -51,7 +60,7 @@ export class DynamicList extends LitElement {
       }
       .item-actions {
         display: flex;
-        gap: 5px;
+        gap: 12px;
         opacity: 0;
         transition: opacity 0.2s ease;
       }
