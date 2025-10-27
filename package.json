@@ -11,7 +11,7 @@
     },
     "dependencies": {
         "@fluentui/web-components": "^2.6.1",
-        "canvas-confetti": "^1.9.3",
+        "canvas-confetti": "^1.9.4",
         "lit": "^3.3.0",
         "shufflr": "^2.0.18"
     },
