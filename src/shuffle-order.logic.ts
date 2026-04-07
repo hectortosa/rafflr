@@ -1,9 +1,6 @@
 import { shuffle } from 'shufflr';
-import type { ShuffleFn } from './random-teams.logic';
+import type { ShuffleFn } from './shuffle.types';
 
-/**
- * Returns a shuffled copy of the input list.
- */
 export function shuffleOrder(
     items: ReadonlyArray<string>,
     shuffleFn: ShuffleFn = shuffle,

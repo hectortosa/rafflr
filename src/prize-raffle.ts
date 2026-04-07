@@ -3,8 +3,8 @@ import { customElement, state } from 'lit/decorators.js';
 
 import confetti from 'canvas-confetti';
 
-import { buildTicketPoolFromParticipants, performRaffle } from './prize-raffle.logic';
-import { parseParticipantsWithTickets } from './lucky-one.logic';
+import { buildTicketPool, parseParticipantsWithTickets } from './lucky-one.logic';
+import { performRaffle } from './prize-raffle.logic';
 
 import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
@@ -208,7 +208,7 @@ export class PrizeRaffle extends LitElement {
 
   private async _performRaffle() {
     const ticketPool = this._useTickets
-      ? buildTicketPoolFromParticipants(this._participantsWithTickets)
+      ? buildTicketPool(this._participantsWithTickets)
       : [...this._participants];
 
     this._results = performRaffle(ticketPool, this._prizes);

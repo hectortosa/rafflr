@@ -55,8 +55,6 @@ describe('generateDiceSetupArray', () => {
 });
 
 describe('rollDices', () => {
-    const identity = <T>(items: Array<T>) => [...items];
-
     it('returns one result per input dice', () => {
         const result = rollDices([{ sides: 6, value: 1 }, { sides: 20, value: 1 }]);
         expect(result).toHaveLength(2);
@@ -71,11 +69,14 @@ describe('rollDices', () => {
         }
     });
 
-    it('with identity shuffle returns the first face (1)', () => {
-        const result = rollDices([{ sides: 6, value: 1 }, { sides: 20, value: 1 }], identity);
+    it('uses the injected roll function for each dice', () => {
+        const result = rollDices(
+            [{ sides: 6, value: 1 }, { sides: 20, value: 1 }],
+            sides => sides,
+        );
         expect(result).toEqual([
-            { sides: 6, value: 1 },
-            { sides: 20, value: 1 },
+            { sides: 6, value: 6 },
+            { sides: 20, value: 20 },
         ]);
     });
 });

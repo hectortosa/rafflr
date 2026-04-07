@@ -1,16 +1,11 @@
 import { shuffle } from 'shufflr';
+import type { ShuffleFn } from './shuffle.types';
 
 export interface Team {
     name: string;
     members: Array<string>;
 }
 
-export type ShuffleFn = <T>(items: Array<T>) => Array<T>;
-
-/**
- * Splits participants into teams of (at most) `teamSize` members.
- * Last team may be smaller. The shuffle function can be injected for deterministic tests.
- */
 export function formTeams(
     participants: ReadonlyArray<string>,
     teamSize: number,
@@ -26,10 +21,9 @@ export function formTeams(
 
     for (let i = 0; i < numTeams; i++) {
         const start = i * teamSize;
-        const end = start + teamSize;
         teams.push({
             name: `Team ${i + 1}`,
-            members: shuffled.slice(start, end),
+            members: shuffled.slice(start, start + teamSize),
         });
     }
 

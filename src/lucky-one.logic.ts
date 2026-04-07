@@ -1,10 +1,6 @@
 import { shuffle } from 'shufflr';
-import type { ShuffleFn } from './random-teams.logic';
+import type { ShuffleFn } from './shuffle.types';
 
-/**
- * Parses participant strings of the form `name:tickets` into structured objects.
- * Defaults tickets to 1 when missing or unparseable.
- */
 export function parseParticipantsWithTickets(strs: ReadonlyArray<string>): Array<ParticipantWithTickets> {
     return strs.map(p => {
         const parts = p.split(':');
@@ -15,9 +11,6 @@ export function parseParticipantsWithTickets(strs: ReadonlyArray<string>): Array
     });
 }
 
-/**
- * Builds a flat pool where each participant appears `tickets` times.
- */
 export function buildTicketPool(participants: ReadonlyArray<ParticipantWithTickets>): Array<string> {
     const pool: Array<string> = [];
     for (const participant of participants) {
@@ -33,19 +26,15 @@ export function buildTicketPool(participants: ReadonlyArray<ParticipantWithTicke
  */
 export function inflatePoolForTwoParticipants(pool: ReadonlyArray<string>, uniqueCount: number): Array<string> {
     if (uniqueCount === 2 && pool.length < 10) {
-        const result = [...pool];
-        const original = [...pool];
-        for (let i = 0; i < 5; i++) {
-            result.push(...original);
+        const inflated: Array<string> = [];
+        for (let i = 0; i < 6; i++) {
+            inflated.push(...pool);
         }
-        return result;
+        return inflated;
     }
     return [...pool];
 }
 
-/**
- * Picks one lucky participant from the (already-built) pool.
- */
 export function pickLuckyOne(
     pool: ReadonlyArray<string>,
     shuffleFn: ShuffleFn = shuffle,

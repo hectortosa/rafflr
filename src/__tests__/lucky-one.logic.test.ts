@@ -5,8 +5,7 @@ import {
     parseParticipantsWithTickets,
     pickLuckyOne,
 } from '../lucky-one.logic';
-
-const identity = <T>(items: Array<T>) => [...items];
+import { identityShuffle } from './helpers';
 
 describe('parseParticipantsWithTickets', () => {
     it('parses name:tickets entries', () => {
@@ -61,7 +60,7 @@ describe('inflatePoolForTwoParticipants', () => {
 
 describe('pickLuckyOne', () => {
     it('returns the first element of the shuffled pool', () => {
-        expect(pickLuckyOne(['a', 'b', 'c'], identity)).toBe('a');
+        expect(pickLuckyOne(['a', 'b', 'c'], identityShuffle)).toBe('a');
     });
 
     it('uses the injected shuffle function', () => {

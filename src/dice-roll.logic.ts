@@ -1,14 +1,15 @@
-import { shuffle } from 'shufflr';
-import type { ShuffleFn } from './random-teams.logic';
-
 export interface Dice {
     sides: number;
     value: number;
 }
 
 /**
- * Parses standard dice notation (e.g. "2d6;1d20") into an array of dice with default value 1.
+ * Picks a uniformly random integer in [1, sides]. Injectable for deterministic tests.
  */
+export type RollFn = (sides: number) => number;
+
+const defaultRoll: RollFn = sides => Math.floor(Math.random() * sides) + 1;
+
 export function generateDicesFromDiceSetup(diceSetup: string): Array<Dice> {
     return diceSetup.toLowerCase().split(';').flatMap(dice => {
         const [countStr, sidesStr] = dice.split('d');
@@ -21,9 +22,6 @@ export function generateDicesFromDiceSetup(diceSetup: string): Array<Dice> {
     });
 }
 
-/**
- * Reverses `generateDicesFromDiceSetup`: groups dice by side count into NdS strings.
- */
 export function generateDiceSetupArray(dices: ReadonlyArray<Dice>): Array<string> {
     const counts = new Map<string, number>();
     for (const dice of dices) {
@@ -33,16 +31,9 @@ export function generateDiceSetupArray(dices: ReadonlyArray<Dice>): Array<string
     return Array.from(counts.entries(), ([type, count]) => `${count}${type}`);
 }
 
-/**
- * Rolls every dice once. Each value lies within `[1, sides]`.
- */
 export function rollDices(
     dices: ReadonlyArray<Dice>,
-    shuffleFn: ShuffleFn = shuffle,
+    roll: RollFn = defaultRoll,
 ): Array<Dice> {
-    return dices.map(dice => {
-        const faces = Array.from({ length: dice.sides }, (_, idx) => idx + 1);
-        const value = shuffleFn(faces)[0];
-        return { sides: dice.sides, value };
-    });
+    return dices.map(dice => ({ sides: dice.sides, value: roll(dice.sides) }));
 }

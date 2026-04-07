@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { formTeams } from '../random-teams.logic';
+import { identityShuffle as identity } from './helpers';
 
-const identity = <T>(items: Array<T>) => [...items];
 const reverse = <T>(items: Array<T>) => [...items].reverse();
 
 describe('formTeams', () => {
