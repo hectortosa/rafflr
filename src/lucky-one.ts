@@ -2,7 +2,13 @@ import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import confetti from 'canvas-confetti';
-import { shuffle } from 'shufflr';
+
+import {
+  buildTicketPool,
+  inflatePoolForTwoParticipants,
+  parseParticipantsWithTickets,
+  pickLuckyOne,
+} from './lucky-one.logic';
 
 import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
@@ -88,14 +94,7 @@ export class LuckyOne extends LitElement {
 
     if (initialParticipants) {
       if (useTickets) {
-        // Parse participants with tickets format (name:tickets)
-        this._participantsWithTickets = initialParticipants.map(p => {
-          const parts = p.split(':');
-          if (parts.length === 2) {
-            return { name: parts[0], tickets: parseInt(parts[1]) || 1 };
-          }
-          return { name: p, tickets: 1 };
-        });
+        this._participantsWithTickets = parseParticipantsWithTickets(initialParticipants);
       } else {
         this._participants = initialParticipants;
       }
@@ -210,32 +209,15 @@ export class LuckyOne extends LitElement {
   }
 
   private _getLuckyOne() {
-    let participantsToShuffle: Array<string> = [];
+    const basePool = this._useTickets
+      ? buildTicketPool(this._participantsWithTickets)
+      : [...this._participants];
+    const uniqueParticipants = this._useTickets
+      ? this._participantsWithTickets.length
+      : this._participants.length;
+    const pool = inflatePoolForTwoParticipants(basePool, uniqueParticipants);
 
-    if (this._useTickets) {
-      // Create a pool where each participant appears as many times as their ticket count
-      for (const participant of this._participantsWithTickets) {
-        for (let i = 0; i < participant.tickets; i++) {
-          participantsToShuffle.push(participant.name);
-        }
-      }
-    } else {
-      participantsToShuffle = [...this._participants];
-    }
-
-    // Handle case with only 2 participants
-    const uniqueParticipants = this._useTickets ? this._participantsWithTickets.length : this._participants.length;
-    if (uniqueParticipants === 2 && participantsToShuffle.length < 10) {
-      const originalPool = [...participantsToShuffle];
-      for (let i = 0; i < 5; i++) {
-        participantsToShuffle = participantsToShuffle.concat(originalPool);
-      }
-    }
-
-    const shuffledParticipants = shuffle(participantsToShuffle);
-    const luckyOne = shuffledParticipants[0];
-
-    this._lastPick = luckyOne;
+    this._lastPick = pickLuckyOne(pool);
   }
 
   private _onItemsChanged(e: CustomEvent) {

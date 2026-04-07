@@ -3,7 +3,8 @@ import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import confetti from 'canvas-confetti';
-import { shuffle } from 'shufflr';
+
+import { shuffleOrder } from './shuffle-order.logic';
 
 import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
@@ -119,7 +120,7 @@ export class ShuffleOrder extends LitElement {
   }
 
   private _shuffleOrder() {
-    this._participants = shuffle(this._participants);
+    this._participants = shuffleOrder(this._participants);
   }
 
   private _onItemsChanged(e: CustomEvent) {

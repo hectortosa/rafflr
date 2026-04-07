@@ -2,20 +2,15 @@ import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import confetti from 'canvas-confetti';
-import { shuffle } from 'shufflr';
 
 import './dynamic-list';
 import './result-panel';
 import { SaveController } from './save-controller';
+import { formTeams, type Team } from './random-teams.logic';
 
 import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
 import { inputStyles } from './styles/input-styles';
-
-declare class Team {
-    name: string;
-    members: Array<string>;
-}
 
 @customElement('random-teams')
 export class RandomTeams extends LitElement {
@@ -148,20 +143,7 @@ export class RandomTeams extends LitElement {
     }
 
     private _teamUp() {
-        let shuffledParticipants: Array<string> = shuffle(this._participants);
-        let numTeams: number = Math.ceil(shuffledParticipants.length / this._teamSize);
-
-        let teams: Array<Team> = new Array<Team>();
-
-        for (var i=0; i < numTeams; i++) {
-            const start = i * this._teamSize;
-            const end = start + this._teamSize;
-            let name = "Team " + (i + 1);
-            let members = shuffledParticipants.slice(start, end);
-            teams.push({ name: name, members: members });
-        }
-
-        this._resultedTeams = teams;
+        this._resultedTeams = formTeams(this._participants, this._teamSize);
     }
 }
 
