@@ -11,13 +11,23 @@
     },
     "dependencies": {
         "@fluentui/web-components": "^2.6.1",
-        "canvas-confetti": "^1.9.3",
-        "lit": "^3.3.0",
+        "canvas-confetti": "^1.9.4",
+        "lit": "^3.3.2",
         "shufflr": "^2.0.18"
     },
     "devDependencies": {
         "@types/canvas-confetti": "^1.9.0",
         "typescript": "^5.8.3",
-        "vite": "^6.3.5"
+        "vite": "^6.4.2"
+    },
+    "pnpm": {
+        "overrides": {
+            "picomatch@>=4.0.0 <4.0.4": ">=4.0.4",
+            "rollup@>=4.0.0 <4.59.0": ">=4.59.0"
+        }
+    },
+    "overrides": {
+        "rollup": ">=4.59.0",
+        "picomatch": ">=4.0.4"
     }
 }
