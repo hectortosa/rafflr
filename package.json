@@ -17,8 +17,8 @@
     },
     "devDependencies": {
         "@types/canvas-confetti": "^1.9.0",
-        "typescript": "^5.8.3",
-        "vite": "^6.4.2"
+        "typescript": "^6.0.2",
+        "vite": "^8.0.6"
     },
     "pnpm": {
         "overrides": {
