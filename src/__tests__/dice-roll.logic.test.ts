@@ -4,6 +4,7 @@ import {
     generateDicesFromDiceSetup,
     rollDices,
 } from '../dice-roll.logic';
+import { identityShuffle } from './helpers';
 
 describe('generateDicesFromDiceSetup', () => {
     it('parses a single dice spec', () => {
@@ -69,14 +70,14 @@ describe('rollDices', () => {
         }
     });
 
-    it('uses the injected roll function for each dice', () => {
+    it('with identity shuffle returns the first face (1)', () => {
         const result = rollDices(
             [{ sides: 6, value: 1 }, { sides: 20, value: 1 }],
-            sides => sides,
+            identityShuffle,
         );
         expect(result).toEqual([
-            { sides: 6, value: 6 },
-            { sides: 20, value: 20 },
+            { sides: 6, value: 1 },
+            { sides: 20, value: 1 },
         ]);
     });
 });

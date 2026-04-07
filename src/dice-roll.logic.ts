@@ -1,14 +1,10 @@
+import { shuffle } from 'shufflr';
+import type { ShuffleFn } from './shuffle.types';
+
 export interface Dice {
     sides: number;
     value: number;
 }
-
-/**
- * Picks a uniformly random integer in [1, sides]. Injectable for deterministic tests.
- */
-export type RollFn = (sides: number) => number;
-
-const defaultRoll: RollFn = sides => Math.floor(Math.random() * sides) + 1;
 
 export function generateDicesFromDiceSetup(diceSetup: string): Array<Dice> {
     return diceSetup.toLowerCase().split(';').flatMap(dice => {
@@ -33,7 +29,10 @@ export function generateDiceSetupArray(dices: ReadonlyArray<Dice>): Array<string
 
 export function rollDices(
     dices: ReadonlyArray<Dice>,
-    roll: RollFn = defaultRoll,
+    shuffleFn: ShuffleFn = shuffle,
 ): Array<Dice> {
-    return dices.map(dice => ({ sides: dice.sides, value: roll(dice.sides) }));
+    return dices.map(dice => {
+        const faces = Array.from({ length: dice.sides }, (_, idx) => idx + 1);
+        return { sides: dice.sides, value: shuffleFn(faces)[0] };
+    });
 }
