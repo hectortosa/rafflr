@@ -7,11 +7,16 @@ import {
 } from "@fluentui/web-components";
 
 import confetti from 'canvas-confetti';
-import { shuffle } from 'shufflr';
 
 import './dynamic-list';
 import './result-panel';
 import { SaveController } from './save-controller';
+import {
+  type Dice,
+  generateDiceSetupArray,
+  generateDicesFromDiceSetup,
+  rollDices,
+} from './dice-roll.logic';
 
 import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
@@ -21,11 +26,6 @@ provideFluentDesignSystem()
   .register(
     fluentTooltip()
   );
-
-declare class Dice {
-  sides: number;
-  value: number;
-}
 
 @customElement('dice-roll')
 export class DiceRoll extends LitElement {
@@ -77,7 +77,7 @@ export class DiceRoll extends LitElement {
 
     let params = new URLSearchParams(window.location.search);
     this._diceSetup = params.get("diceSetup") || "2d6;1d20";
-    let initialDices = this._generateDicesFromDiceSetup(this._diceSetup);
+    let initialDices = generateDicesFromDiceSetup(this._diceSetup);
 
     if (initialDices) {
       this._dices = initialDices;
@@ -117,51 +117,13 @@ export class DiceRoll extends LitElement {
   }
 
   private _save() {
-    let setupToSave = { diceSetup: this._generateDiceSetupArray(this._dices) };
+    let setupToSave = { diceSetup: generateDiceSetupArray(this._dices) };
     this.saveController.save(setupToSave);
-  }
-
-  /**
-   * Generates an array of dice setup strings,
-   * where each string is of format NDS,
-   * where N is the number of dices of the sime sides and S is the number of sides
-   * @param dices The array of dices.
-   */
-  private _generateDiceSetupArray(dices: Array<Dice>): Array<string> {
-    let diceCountBySides = new Map<string, number>();
-
-    dices.forEach(dice => {
-      let diceType = "d" + dice.sides.toString();
-      let diceCount = diceCountBySides.get(diceType) || 0;
-      diceCountBySides.set(diceType, diceCount + 1);
-    });
-
-    let diceSetupArray = new Array<string>();
-
-    diceCountBySides.forEach((diceCount, diceType) => {
-      diceSetupArray.push(diceCount.toString() + diceType);
-    });
-
-    return diceSetupArray;
   }
 
   private _onDiceSetupChange(e: Event) {
     this._diceSetup = (e.target as HTMLInputElement).value;
-    this._dices = this._generateDicesFromDiceSetup(this._diceSetup);
-  }
-
-  /**
- * Generates an array of dices from a quick setup string 
- * of comma separated dice setup of format 2D20,
- * where 2 is the number of dices and 20 is the number of sides.
- * @param diceSetup The quick setup string.
- * @returns An array of dices.
- */
-  private _generateDicesFromDiceSetup(diceSetup: string): Array<Dice> {
-    return diceSetup.toLowerCase().split(";").map(dice => {
-      let diceParts = dice.split("d");
-      return Array<Dice>(parseInt(diceParts[0], 10)).fill({ sides: parseInt(diceParts[1], 10), value: 1 });
-    }).flat();
+    this._dices = generateDicesFromDiceSetup(this._diceSetup);
   }
 
   private _sleep(millis: number) {
@@ -185,16 +147,7 @@ export class DiceRoll extends LitElement {
   }
 
   private _diceRoll() {
-    let roll: Array<Dice> = new Array<Dice>();
-
-    this._dices.forEach(dice => {
-      const diceSides = Array<number>(dice.sides).fill(0).map((_, index) => index + 1);
-      const result: number = shuffle(diceSides)[0];
-
-      roll.push({ sides: dice.sides, value: result });
-    });
-
-    this._resultedRoll = roll;
+    this._resultedRoll = rollDices(this._dices);
   }
 }
 

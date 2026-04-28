@@ -2,7 +2,9 @@ import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import confetti from 'canvas-confetti';
-import { shuffle } from 'shufflr';
+
+import { buildTicketPool, parseParticipantsWithTickets } from './lucky-one.logic';
+import { performRaffle } from './prize-raffle.logic';
 
 import { buttonStyles } from './styles/button-styles';
 import { linkStyles } from './styles/link-styles';
@@ -83,14 +85,7 @@ export class PrizeRaffle extends LitElement {
 
     if (initialParticipants) {
       if (useTickets) {
-        // Parse participants with tickets format (name:tickets)
-        this._participantsWithTickets = initialParticipants.map(p => {
-          const parts = p.split(':');
-          if (parts.length === 2) {
-            return { name: parts[0], tickets: parseInt(parts[1]) || 1 };
-          }
-          return { name: p, tickets: 1 };
-        });
+        this._participantsWithTickets = parseParticipantsWithTickets(initialParticipants);
       } else {
         this._participants = initialParticipants;
       }
@@ -212,70 +207,11 @@ export class PrizeRaffle extends LitElement {
   }
 
   private async _performRaffle() {
-    let results: Array<RaffleResult> = new Array<RaffleResult>();
+    const ticketPool = this._useTickets
+      ? buildTicketPool(this._participantsWithTickets)
+      : [...this._participants];
 
-    // Create ticket pool based on mode
-    let ticketPool: Array<string> = [];
-    
-    if (this._useTickets) {
-      // Create a pool where each participant appears as many times as their ticket count
-      for (const participant of this._participantsWithTickets) {
-        for (let i = 0; i < participant.tickets; i++) {
-          ticketPool.push(participant.name);
-        }
-      }
-    } else {
-      // Equal chance for everyone
-      ticketPool = [...this._participants];
-    }
-
-    // Build expanded participants list if needed
-    let unrollParticipants = this._buildParticipantsList(ticketPool, this._prizes.length, "For sharing");
-    const shuffledParticipants = shuffle(unrollParticipants);
-    const shuffledPrizes = shuffle(this._prizes);
-
-    for (var i = 0; i < this._prizes.length; i++) {
-      var currentWinner = results.find(element => element.winner === shuffledParticipants[i]);
-
-      if (currentWinner) {
-        currentWinner.prizes.push(shuffledPrizes[i])
-      } else {
-        results.push({ winner: shuffledParticipants[i], prizes: [shuffledPrizes[i]] });
-      }
-    }
-
-    results.sort((a, b) => {
-      if (a.winner === b.winner) {
-        return 0;
-      }
-
-      return a.winner < b.winner ? -1 : 1; 
-    });
-
-    this._results = results;
-  }
-
-  private _buildParticipantsList(ticketPool: Array<string>, numberOfPrizes: number, spareParticipant: string) {
-    let assignement;
-    let toShare;
-    let newParticipantsList = new Array<string>();
-      
-    if (numberOfPrizes <= ticketPool.length) {
-      return ticketPool;
-    }
-  
-    assignement = Math.floor(numberOfPrizes / ticketPool.length);
-    toShare = numberOfPrizes - (assignement * ticketPool.length);
-    
-    for (var i = 0; i < assignement; i++) {
-      newParticipantsList = newParticipantsList.concat(ticketPool);
-    }
-    
-    for (var j = 0; j < toShare; j++) {
-      newParticipantsList.push(spareParticipant);
-    }
-    
-    return newParticipantsList;
+    this._results = performRaffle(ticketPool, this._prizes);
   }
 }
 
