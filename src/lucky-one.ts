@@ -138,7 +138,7 @@ export class LuckyOne extends LitElement {
         </footer>
         <div class="winners-panel">
           <span ?hidden=${!this._raffleEnded}>🍀</span>
-          <result-panel ?hidden=${this._picked.length == 0} title=${this._lastPick} .result=${this._picked.slice(1)}></result-panel>
+          <result-panel ?hidden=${this._lastPick === "" && this._picked.length === 0} title=${this._lastPick} .result=${this._picked.slice(1)}></result-panel>
           <span ?hidden=${!this._raffleEnded}>🍀</span>
         </div>
       </div>
